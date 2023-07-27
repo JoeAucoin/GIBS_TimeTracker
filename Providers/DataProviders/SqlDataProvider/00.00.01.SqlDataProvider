@@ -1,0 +1,123 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/
+
+
+/****** Object:  Table [dbo].[GIBS_TimeTracker]    Script Date: 7/20/2023 2:13:01 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GIBS_TimeTracker](
+	[TimeTrackerID] [int] IDENTITY(1,1) NOT NULL,
+	[WorkDate] [date] NOT NULL,
+	[UserID] [int] NOT NULL,
+	[StartTime] [datetime] NULL,
+	[EndTime] [datetime] NULL,
+	[TotalTime] [decimal](10, 2) NULL,
+	[WorkEndDate] [date] NULL,
+	[CreatedOnDate] [datetime] NULL,
+	[CreatedByUserID] [int] NOT NULL,
+	[LastModifiedByUserID] [int] NULL,
+	[LastModifiedOnDate] [datetime] NULL,
+ CONSTRAINT [PK_GIBS_TimeTracker] PRIMARY KEY CLUSTERED 
+(
+	[TimeTrackerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TRIGGER dbo.[TIME_DIFFERENCE]
+ON dbo.[GIBS_TimeTracker]
+AFTER UPDATE  
+--[GIBS_TimeTracker].[EndTime] 
+
+AS
+
+IF ( UPDATE (EndTime) )
+BEGIN
+
+UPDATE GIBS_TimeTracker SET TotalTime = 
+cast(
+         (
+                    DATEDIFF(MINUTE, GIBS_TimeTracker.StartTime, GIBS_TimeTracker.EndTime) 
+
+         ) AS decimal
+      ) /60  ;
+END
+
+GO
+
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_TimeTrackerIDPhoto]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[GIBS_TimeTrackerIDPhoto](
+	[TTPhotoID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NOT NULL,
+	[IDPhoto] varbinary(max) NOT NULL,
+	[CreatedOnDate] [datetime] NULL CONSTRAINT [DF_GIBS_TimeTrackerIDPhoto_CreatedOnDate]  DEFAULT (getdate()),
+	[CreatedByUserID] [int] NOT NULL,
+	[LastModifiedByUserID] [int] NULL,
+	[LastModifiedOnDate] [datetime] NULL,
+ CONSTRAINT [PK_GIBS_TimeTrackerIDPhoto] PRIMARY KEY CLUSTERED 
+(
+	[TTPhotoID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_TimeTracker_CheckInOut_Update]    Script Date: 7/27/2023 8:23:20 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GIBS_TimeTracker_CheckInOut_Update] 
+	
+	@TimeTrackerID int, 
+	@UserID int,
+    @StartTime datetime,
+	@EndTime datetime
+	 
+AS 
+BEGIN 
+	SET NOCOUNT ON;
+	Declare @LastModifiedOnDate datetime
+	set @LastModifiedOnDate = GETDATE();
+	
+	UPDATE [dbo].[GIBS_TimeTracker]
+   SET [WorkDate] = @StartTime
+      ,[StartTime] = @StartTime
+      ,[EndTime] = @EndTime
+      ,[WorkEndDate] = @EndTime
+      ,[LastModifiedByUserID] = @UserID
+      ,[LastModifiedOnDate] = @LastModifiedOnDate
+ WHERE [TimeTrackerID] = @TimeTrackerID
+	
+END
+GO
+
+
+
+
+
