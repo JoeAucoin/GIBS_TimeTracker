@@ -15,6 +15,15 @@ namespace GIBS.Modules.GIBS_TimeTracker
     {
 
         /// <summary>
+        /// LabelMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelMessage;
+
+        /// <summary>
         /// LabelClientInfo control.
         /// </summary>
         /// <remarks>
@@ -40,6 +49,24 @@ namespace GIBS.Modules.GIBS_TimeTracker
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HiddenFieldTimeTrackerID;
+
+        /// <summary>
+        /// HiddenFieldTTUserID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HiddenFieldTTUserID;
+
+        /// <summary>
+        /// ButtonUpdate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonUpdate;
 
         /// <summary>
         /// lblStartTime control.
@@ -114,15 +141,6 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected global::System.Web.UI.WebControls.Literal LiteralCreatedOnDate;
 
         /// <summary>
-        /// ButtonUpdate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonUpdate;
-
-        /// <summary>
         /// ButtonDelete control.
         /// </summary>
         /// <remarks>
@@ -130,5 +148,23 @@ namespace GIBS.Modules.GIBS_TimeTracker
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button ButtonDelete;
+
+        /// <summary>
+        /// ButtonReturnToList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonReturnToList;
+
+        /// <summary>
+        /// ButtonReturnToUserRecord control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonReturnToUserRecord;
     }
 }

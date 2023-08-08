@@ -28,6 +28,7 @@ using DotNetNuke.Framework.JavaScriptLibraries;
 using System.Web;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Web.UI;
 
 namespace GIBS.Modules.GIBS_TimeTracker
 {
@@ -53,7 +54,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected string _RoleName = "Registered Users";
         
         int VolunteerUserId = Null.NullInteger;
-        public int DonorPortal;
+        public int UserPortal;
         public bool _EmailNewUserCredentials = false;
 
         protected override void OnInit(EventArgs e)
@@ -74,30 +75,43 @@ namespace GIBS.Modules.GIBS_TimeTracker
         {
             try
             {
+               
+              
 
-
-
-                DonorPortal = this.PortalId;
-
+                UserPortal = this.PortalId;
                 LoadSettings();
 
 
-                //if (Request.QueryString["DonationID"] != null)
-                //{
-                //    DonationID = Int32.Parse(Request.QueryString["DonationID"]);
-                //}
-
-
-
-
-
-
+   
 
                 if (!IsPostBack)
                 {
+                    txtStartDate.Text = DateTime.Now.AddMonths(-1).ToShortDateString();
+                    txtEndDate.Text = DateTime.Now.ToShortDateString();
 
 
-                    
+                    if (Request.QueryString["TabFocus"] != null)
+                    {
+                        HttpCookie myCookie = new HttpCookie("dnnTabs-tabs-client");
+                        myCookie.HttpOnly = false;
+                        switch (Request.QueryString["TabFocus"])
+                        {
+                            case "UserRecord":
+                                myCookie.Value = "";
+                                break;
+
+                            case "History":
+                                myCookie.Value = "3";
+                                break;
+
+                            default:
+                                myCookie.Value = "";
+                                break;
+                        }
+                        Response.Cookies.Add(myCookie);
+                    }
+
+
                     GetStates();
                    // FillDropDown();
 
@@ -111,7 +125,11 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                         SetPhotoIDLink();
 
+                        // GET USERS CHECK-IN HISTORY
+                        GroupIt();
+                        Fill_Report();
 
+                        cmdSendCredentials.Visible = true;
                     }
                     else
                     {
@@ -150,9 +168,9 @@ namespace GIBS.Modules.GIBS_TimeTracker
             try
             {
 
-                DotNetNuke.Entities.Users.UserInfo VolunteerUser = DotNetNuke.Entities.Users.UserController.GetUserById(DonorPortal, RecordID);
+                DotNetNuke.Entities.Users.UserInfo VolunteerUser = DotNetNuke.Entities.Users.UserController.GetUserById(UserPortal, RecordID);
 
-                LabelName.Text = VolunteerUser.Profile.GetPropertyValue("Company") + " - " + VolunteerUser.FirstName + " " + VolunteerUser.LastName;
+                LabelName.Text = VolunteerUser.FirstName + " " + VolunteerUser.LastName;
 
                 //      this.ModuleConfiguration.ModuleControl.ControlTitle = DonationUser.Profile.GetPropertyValue("Company") + " - " + DonationUser.DisplayName;
 
@@ -225,7 +243,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 //   REMOVE EMPTY LINES
                 _PrimaryAddress = Regex.Replace(_PrimaryAddress.ToString(), @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
 
-              //  txtPrimaryAddress.Text = _PrimaryAddress.ToString().TrimStart().TrimEnd().Replace("  ", " ");
+                //  txtPrimaryAddress.Text = _PrimaryAddress.ToString().TrimStart().TrimEnd().Replace("  ", " ");
+                FillClientPhoto(RecordID);
 
 
 
@@ -237,12 +256,207 @@ namespace GIBS.Modules.GIBS_TimeTracker
         }
 
 
-        public void GetStates()
+        public void FillClientPhoto(int ttUserID)
+        {
+
+            try
+            {
+                //load the item
+                TimeTrackerController controller = new TimeTrackerController();
+                TimeTrackerInfo item = controller.GetPhotoByUserID(ttUserID);
+
+                if (item != null)
+                {
+
+                   
+
+                    if (item.IDPhoto != null)
+                    {
+                        ImageIDClient.Visible = true;
+                        byte[] imagem = (byte[])(item.IDPhoto);
+                        string PROFILE_PIC = Convert.ToBase64String(imagem);
+
+                        ImageIDClient.ImageUrl = String.Format("data:image/png;base64,{0}", PROFILE_PIC);
+                        ImageIDClient.AlternateText = item.FirstName + ' ' + item.LastName;
+                        
+                    }
+                    else
+                    {
+                        ImageIDClient.Visible = false;
+                      
+                    }
+
+                }
+                
+
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ProcessModuleLoadException(this, ex);
+            }
+
+        }
+
+
+        protected void btnGetSchedule_Click(object sender, EventArgs e)
+        {
+            GroupIt();
+            Fill_Report();
+        }
+
+        public void Fill_Report()
         {
 
             try
             {
 
+                List<TimeTrackerInfo> items;
+                TimeTrackerController controller = new TimeTrackerController();
+
+                items = controller.GetCheckInReport_ForUser(Convert.ToDateTime(txtStartDate.Text.ToString()), Convert.ToDateTime(txtEndDate.Text.ToString()), Int32.Parse(hidUserId.Value.ToString()));
+
+                gv_Report.DataSource = items;
+                gv_Report.DataBind();
+
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ProcessModuleLoadException(this, ex);
+            }
+
+        }
+
+        protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            int itemID = (int)gv_Report.DataKeys[e.NewEditIndex].Value;
+            Response.Redirect(Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString() + "&ItemId=" + itemID));
+
+
+        }
+
+        protected void gv_Report_DataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                var hyperLink = e.Row.FindControl("HyperLink1") as HyperLink;
+                if (hyperLink != null)
+                {
+                    string newURL = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString(), "ttid=" + DataBinder.Eval(e.Row.DataItem, "TimeTrackerID"));
+                    hyperLink.NavigateUrl = newURL.ToString();
+                }
+
+
+                if (e.Row.Cells[6].Text.Contains("12:00 AM"))
+                {
+                    e.Row.Cells[6].Text = "Not Checked Out!<br / >Report to Manager";
+                    e.Row.Cells[6].BackColor = System.Drawing.Color.LightPink;
+
+                }
+            }
+        }
+
+
+
+        protected void gv_Report_Sorting(object sender, GridViewSortEventArgs e)
+        {
+
+        }
+
+        public void GroupIt()
+        {
+
+            try
+            {
+
+                helper = new GridViewHelper(this.gv_Report);
+                helper.RegisterGroup("WorkDate", true, true);
+
+                helper.RegisterSummary("TotalTime", SummaryOperation.Sum, "WorkDate");
+                helper.RegisterSummary("DisplayName", SummaryOperation.Count, "WorkDate");
+
+
+
+                helper.RegisterSummary("TotalTime", SummaryOperation.Sum);
+                helper.RegisterSummary("DisplayName", SummaryOperation.Count);
+
+
+                // helper.RegisterGroup("ClientZipCode", true, true);
+                helper.GroupHeader += new GroupEvent(helper_GroupHeader);
+                helper.GroupSummary += new GroupEvent(helper_Bug);
+                helper.GeneralSummary += new FooterEvent(helper_GeneralSummary);
+                helper.ApplyGroupSort();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ProcessModuleLoadException(this, ex);
+            }
+
+        }
+
+        void helper_GeneralSummary(GridViewRow row)
+        {
+
+            row.Cells[0].HorizontalAlign = HorizontalAlign.Right;
+
+            row.Cells[0].Text = "Grand Totals: ";
+            row.BackColor = Color.BlanchedAlmond;
+            row.ForeColor = Color.Black;
+
+        }
+
+        private void helper_Bug(string groupName, object[] values, GridViewRow row)
+        {
+            if (groupName == null) return;
+
+            DateTime dt;
+            dt = Convert.ToDateTime(values[0]);
+
+            row.BackColor = Color.Lavender;
+            row.Cells[0].HorizontalAlign = HorizontalAlign.Right;
+            row.Cells[0].Text = dt.DayOfWeek.ToString() + " - " + Convert.ToDateTime(values[0]).ToShortDateString() + " Totals&nbsp;";
+        }
+
+        private void helper_ManualSummary(GridViewRow row)
+        {
+            GridViewRow newRow = helper.InsertGridRow(row);
+            newRow.Cells[0].HorizontalAlign = HorizontalAlign.Right;
+            newRow.Cells[0].Text = String.Format("Total: {0} items, ", helper.GeneralSummaries["TotalTime"].Value, helper.GeneralSummaries["FirstName"].Value);
+        }
+
+
+
+        private void helper_GroupHeader(string groupName, object[] values, GridViewRow row)
+        {
+            if (groupName == "WorkDate")
+            {
+                DateTime dt;
+                dt = Convert.ToDateTime(row.Cells[0].Text);
+                row.BackColor = Color.LightGray;
+                row.Cells[0].Text = "&nbsp;&nbsp;<b>" + dt.DayOfWeek.ToString() + " - " + Convert.ToDateTime(row.Cells[0].Text).ToShortDateString() + "</b>";
+
+
+            }
+            else if (groupName == "ShipName")
+            {
+                row.BackColor = Color.FromArgb(236, 236, 236);
+                row.Cells[0].Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + row.Cells[0].Text;
+            }
+        }
+
+
+        public void GetStates()
+        {
+
+            try
+            {
+                //UserRecord
                 var _states = new ListController().GetListEntryInfoItems("Region", "Country.US", this.PortalId);
 
                 ddlState.DataTextField = "Text";
@@ -294,7 +508,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 //  DotNetNuke.Entities.Users.UserInfo uUser = DotNetNuke.Entities.Users.UserController.GetUserById(PortalSettings.PortalId, RecordID);
 
                 UserController objUserController = new UserController();
-                UserInfo uUser = objUserController.GetUser(DonorPortal, RecordID);
+                UserInfo uUser = objUserController.GetUser(UserPortal, RecordID);
 
                 uUser.FirstName = txtFirstName.Text.Trim().ToString();
                 uUser.LastName = txtLastName.Text.Trim().ToString();
@@ -320,7 +534,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                
 
-                UserController.UpdateUser(DonorPortal, uUser);
+                UserController.UpdateUser(UserPortal, uUser);
 
                 // RELOAD RECORD
                 LoadRecord(RecordID);
@@ -351,7 +565,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                     UserInfo u = new UserInfo();
 
-                    u = UserController.GetUserById(DonorPortal, Int32.Parse(Request.QueryString["UserId"]));
+                    u = UserController.GetUserById(UserPortal, Int32.Parse(Request.QueryString["UserId"]));
                     //     u.Membership.v
                     DotNetNuke.Entities.Users.UserController.ResetPasswordToken(u); 
 
@@ -388,7 +602,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                 UserInfo oUser = new UserInfo();
 
-                oUser.PortalID = DonorPortal;
+                oUser.PortalID = UserPortal;
                 oUser.IsSuperUser = false;
                 oUser.FirstName = txtFirstName.Text.Trim().ToString();
                 oUser.LastName = txtLastName.Text.Trim().ToString();
@@ -461,7 +675,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                         //retrieve role
                         string groupName = AddUserRole;
                         DotNetNuke.Security.Roles.RoleInfo ri = rc.GetRoleByName(this.PortalId, groupName);
-                        rc.AddUserRole(DonorPortal, oUser.UserID, ri.RoleID, DotNetNuke.Security.Roles.RoleStatus.Approved, false, DateTime.Today, Null.NullDate);
+                        rc.AddUserRole(UserPortal, oUser.UserID, ri.RoleID, DotNetNuke.Security.Roles.RoleStatus.Approved, false, DateTime.Today, Null.NullDate);
                     }
 
                     //string EmailContent = settingsData.EmailMessage + content;
@@ -495,6 +709,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                     // THIS URL WILL GIVE YOU A BLANK FORM TO ADD A NEW USER RECORD
                     //string newURL = Globals.NavigateURL(this.TabId, "", "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
+
+                    cmdSendCredentials.Visible = true;
 
                     Response.Redirect(newURL, false);
 

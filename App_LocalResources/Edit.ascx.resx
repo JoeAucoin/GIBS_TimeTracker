@@ -120,6 +120,9 @@
   <data name="AddContent.Action" xml:space="preserve">
     <value>Add New User</value>
   </data>
+  <data name="btnGetLoginReport.Text" xml:space="preserve">
+    <value>Update Check-In History</value>
+  </data>
   <data name="cmdCancel.Text" xml:space="preserve">
     <value>Return to FrontDesk</value>
   </data>

@@ -75,14 +75,20 @@
     GridLines="None" CssClass="table table-striped table-bordered table-list" runat="server" 
     OnPageIndexChanged="dnnGrid_PageIndexChanged">
     <PagerStyle CssClass="NormalBold" />
-    <HeaderStyle HorizontalAlign="Center" />
+    <HeaderStyle HorizontalAlign="Center" Font-Bold="true" />
     <ItemStyle CssClass="dnnGridItem" />
     <AlternatingItemStyle CssClass="dnnGridAltItem" />
 
     <Columns>
-        <dnn:ImageCommandColumn CommandName="Edit" ImageURL="~/images/edit.gif" EditMode="URL"
+        <dnn:ImageCommandColumn CommandName="Edit" ImageURL="~/DesktopModules/GIBS_TimeTracker/images/edit-32.png" EditMode="URL" ItemStyle-Width="60px"
             HeaderText="Edit" KeyField="UserID" />
+		        <dnn:ImageCommandColumn CommandName="CheckInOut" ImageURL="~/Icons/Sigma/Refresh_32x32_Standard.png" EditMode="URL" ItemStyle-Width="60px"
+            HeaderText="Check In-Out" KeyField="UserID" />      
         
+<asp:TemplateColumn HeaderText="Photo" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center">    
+            <ItemTemplate><asp:Image ID="PhotoID" CssClass="hover-zoom" runat="server" Height="40px" ImageUrl='<%# "data:image/png;base64," + Convert.ToBase64String((byte[])Eval("IDPhoto"))%>'></asp:Image>       
+            </ItemTemplate>
+        </asp:TemplateColumn>
 
         <dnn:TextColumn DataField="UserName" HeaderText="Username" Visible="true" />
         <dnn:TextColumn DataField="FirstName" HeaderText="First Name" />
@@ -92,7 +98,7 @@
         <dnn:TextColumn DataField="Street" HeaderText="Street" Visible="false" />
         <asp:TemplateColumn HeaderText="Address">
             <ItemTemplate>
-                <asp:Label ID="FullAddress" Text='<%# Eval("Street") + ", " + Eval("City") + ", " + Eval("State") + " " + Eval("PostalCode") %>'
+                <asp:Label ID="FullAddress" Text='<%# Eval("Street") + ", " + Eval("City") + ", " + GetStateLookup(Eval("State")) + " " + Eval("PostalCode") %>'
                     runat="server" />
             </ItemTemplate>
         </asp:TemplateColumn>

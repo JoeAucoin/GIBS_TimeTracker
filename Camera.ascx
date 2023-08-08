@@ -129,7 +129,7 @@
 <div class="button-group">
   
  
-    <asp:Button ID="ButtonReturnToClientManager" runat="server" Text="Return To Client Manager" OnClick="ButtonReturnToClientManager_Click" />
+    <asp:Button ID="ButtonReturnToClientManager" runat="server" Text="Return To User Record" OnClick="ButtonReturnToClientManager_Click" />
 
     
     

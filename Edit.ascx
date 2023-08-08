@@ -26,34 +26,25 @@
     });
 
 
-    //$(function () {
-    //    $("#txtDonationDate").datepicker({
-    //        numberOfMonths: 2,
-    //        showButtonPanel: false,
-    //        showCurrentAtPos: 1
-    //    });
-
-    //});
-
-    //$(function () {
-    //    $("#txtPledgeDate").datepicker({
-    //    dateFormat: "yy-mm-dd",
-    //        numberOfMonths: 1,
-    //        showButtonPanel: false,
-    //        showCurrentAtPos: 0
-    //    });
-    //    $("#txtPledgeDateEnd").datepicker({
-    //        dateFormat: "yy-mm-dd",
-    //        numberOfMonths: 0,
-    //        showButtonPanel: false,
-    //        showCurrentAtPos: 0
-    //    });
-
-    //});
+    $(function () {
+        $("#txtStartDate").datepicker({
+            numberOfMonths: 1,
+            showButtonPanel: false,
+            showCurrentAtPos: 0
+        });
+        $("#txtEndDate").datepicker({
+            numberOfMonths: 2,
+            showButtonPanel: false,
+            showCurrentAtPos: 0
+        });
+    });
 
     function UseData() {
         $.Watermark.HideAll();   //Do Stuff   $.Watermark.ShowAll();
     }
+
+    // BIND DNN Tabs
+    jQuery(function ($) { $('#tabs-client').dnnTabs(); });
 
 </script>
 
@@ -66,13 +57,21 @@
 
 <asp:Label ID="lblDebug" runat="server" Visible="false" />
 <asp:HiddenField ID="hidUserId" runat="server" />
-
+<div class="pull-right"><asp:Image ID="ImageIDClient" runat="server" Height="70" CssClass="hover-zoom" /> <asp:HyperLink ID="HyperLinkPhotoID" runat="server" Visible="false" CssClass="dnnSecondaryAction">Manage PhotoID</asp:HyperLink></div>
 <h2><asp:Label ID="LabelName" runat="server" Text=""></asp:Label></h2>
 
- <div> <asp:HyperLink ID="HyperLinkPhotoID" runat="server" Visible="false">Manage PhotoID</asp:HyperLink></div>
+ 
 
 <div style=" text-align:center; padding-bottom:6px;">
     <asp:Label ID="lblStatus" runat="server" Text="" CssClass="NormalRed"></asp:Label><br /></div>
+
+  <div class="dnnForm" id="tabs-client">
+        <ul class="dnnAdminTabNav">
+            <li><a href="#UserRecord">User Information</a></li>
+
+            <li><a href="#History">Check In-Out History</a></li>
+        </ul>
+
 
 
     <div id="UserRecord" class="dnnClear">
@@ -82,11 +81,11 @@
                 CssClass="dnnPrimaryAction"></asp:LinkButton><br />
 
                 <br />
-            <asp:LinkButton ID="cmdSendCredentials" Text="Send Password Reset Link" runat="server" CssClass="dnnSecondaryAction" 
+            <asp:LinkButton ID="cmdSendCredentials" Text="Send Password Reset" runat="server" CssClass="dnnSecondaryAction" Visible="false" 
                 OnClick="cmdSendCredentials_Click"></asp:LinkButton>
             <asp:Label ID="lblSendCredentials" runat="server" Text="" CssClass="NormalBold NormalRed" />
         </div>
-        <div class="dnnForm" id="form-edit-donor">
+        <div class="dnnForm" id="form-edit-user">
             <fieldset>
 
 
@@ -146,6 +145,72 @@
         </div>
 
 </div>
+
+
+      <div id="History" class="dnnClear">
+          
+
+
+<div style=" float:right">
+<asp:Button ID="btnGetSchedule" runat="server" Text="Button" ResourceKey="btnGetLoginReport" onclick="btnGetSchedule_Click" CssClass="dnnPrimaryAction" /></div>
+<div class="dnnForm" id="form-demo">
+    <fieldset>
+        <div class="dnnFormItem">
+            <dnn:Label ID="lblStartDate" runat="server" CssClass="dnnFormLabel" AssociatedControlID="txtStartDate" Text="Start Date" />
+            <asp:TextBox ID="txtStartDate" runat="server" ClientIDMode="Static" />
+        </div>
+        <div class="dnnFormItem">
+            <dnn:Label ID="lblEndDate" runat="server" CssClass="dnnFormLabel" AssociatedControlID="txtEndDate" Text="End Date" />
+            <asp:TextBox ID="txtEndDate" runat="server" ClientIDMode="Static" />
+        </div>		
+    </fieldset>
+</div>	
+
+
+<asp:GridView ID="gv_Report" runat="server" HorizontalAlign="Center" OnRowDataBound="gv_Report_DataBound"  
+    AutoGenerateColumns="False" CssClass="dnnGrid" OnSorting="gv_Report_Sorting"   
+    resourcekey="gv_ReportDetails" EnableViewState="False" DataKeyNames="TimeTrackerID" >
+    <HeaderStyle CssClass="dnnGridHeader" />
+    <RowStyle CssClass="dnnGridItem" />
+<AlternatingRowStyle CssClass="dnnGridAltItem" />     
+<PagerStyle CssClass="pgr" />  
+<PagerSettings Mode="NumericFirstLast" /> 
+    <Columns>
+        
+        <asp:TemplateField HeaderText="Edit" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center">
+                            <ItemTemplate>      
+                                <asp:HyperLink ID="HyperLink1" runat="server"><asp:image ID="imgEdit" runat="server" imageurl="~/DesktopModules/GIBS_TimeTracker/images/edit-32.png" AlternateText="Edit Record" /></asp:HyperLink>
+
+                            </ItemTemplate>
+                        </asp:TemplateField>
+         
+
+        <asp:TemplateField HeaderText="Photo" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center" Visible="false">    
+            <ItemTemplate><asp:Image ID="PhotoID" CssClass="hover-zoom" runat="server" Height="40px" ImageUrl='<%# "data:image/png;base64," + Convert.ToBase64String((byte[])Eval("IDPhoto"))%>'></asp:Image>       
+            </ItemTemplate>
+        </asp:TemplateField>	
+
+    <asp:BoundField HeaderText="TimeTrackerID" Visible="false" DataField="TimeTrackerID" SortExpression="TimeTrackerID" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+      <asp:BoundField HeaderText="WorkDate" DataField="WorkDate" SortExpression="WorkDate"  ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+      
+      
+        <asp:BoundField HeaderText="Name" DataField="DisplayName" SortExpression="DisplayName" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+
+		<asp:BoundField HeaderText="StartTime" DataField="StartTime" SortExpression="StartTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+        <asp:BoundField HeaderText="EndTime" DataField="EndTime" SortExpression="EndTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+		<asp:BoundField HeaderText="Hours" DataField="TotalTime" SortExpression="TotalTime" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+        <asp:BoundField HeaderText="Email" DataField="Email" Visible="false" SortExpression="Email" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Left"></asp:BoundField>
+        
+
+
+    </Columns>
+</asp:GridView>	
+
+
+          </div>
+
+
+      </div>
 
 <div style="float:right;">
 

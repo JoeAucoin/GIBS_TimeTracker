@@ -17,6 +17,7 @@ using System.Data;
 using DotNetNuke.UI.WebControls;
 using GIBS.Modules.GIBS_TimeTracker.Components;
 using DotNetNuke.Common.Lists;
+using System.Security.Policy;
 
 namespace GIBS.Modules.GIBS_TimeTracker
 {
@@ -68,6 +69,18 @@ namespace GIBS.Modules.GIBS_TimeTracker
                        // string formatString = EditUrl("UserId", "KEYFIELD", "Edit", "TabFocus=DonorRecord");
                         formatString = formatString.Replace("KEYFIELD", "{0}");
                         imageColumn.NavigateURLFormatString = formatString;
+                    }
+
+                    //CheckInOut
+                    if (imageColumn.CommandName == "CheckInOut")
+                    {
+                        //The Friendly URL parser does not like non-alphanumeric characters                          
+                        //so first create the format string with a dummy value and then                          
+                        //replace the dummy value with the FormatString place holder                          
+                        string formatString1 = Globals.NavigateURL(TabId, "", "UserId=IDFIELD");
+
+                        formatString1 = formatString1.Replace("IDFIELD", "{0}");
+                        imageColumn.NavigateURLFormatString = formatString1;
                     }
 
                     //Localize Image Column Text                     
@@ -384,7 +397,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void btnAddNewUser_Click(object sender, EventArgs e)
         {
             //  Response.Redirect(Globals.NavigateURL(this.TabId, EditUrl(), ""), true);
-            Response.Redirect(EditUrl("TabFocus", "DonorRecord"));
+            Response.Redirect(EditUrl("TabFocus", "UserRecord"));
         }
 
         public ModuleActionCollection ModuleActions

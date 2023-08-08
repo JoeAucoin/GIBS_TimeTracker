@@ -160,7 +160,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void ButtonReturnToClientManager_Click(object sender, EventArgs e)
         {
 
-            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditClient", "mid=" + ModuleId.ToString() + "&cid=" + ttUserID.ToString()));
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString() + "&UserId=" + ttUserID.ToString()));
             //   object p =   DependencyProvider.GetRequiredService( INavigationManager).NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString());
             //      object p = DependencyProvider.GetRequiredService(INavigationManager).NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString());
         }

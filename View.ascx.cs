@@ -47,10 +47,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
     {
 
-        //   //  SigPlusNET1;
-        //   SigPlusNET sigObj = null;
-        ////   static FileHandler fh;
-        //   Topaz.SigPlusNET SigPlusNET1 = new Topaz.SigPlusNET();
+
         static string _ReportsRole = "";
         static string _ManagerRole = "";
 
@@ -72,11 +69,16 @@ namespace GIBS.Modules.GIBS_TimeTracker
             try
             {
                 txtUserId.Focus();
-                if(!IsPostBack)
+                if (!IsPostBack)
                 {
                     LoadSettings();
+
+                    if (Request.QueryString["UserId"] != null)
+                    {
+                        txtUserId.Text = Request.QueryString["UserId"];
+                        BtnLogin_Click(null,null);
+                    }
                 }
-                
             }
             catch (Exception exc) //Module failed to load
             {
@@ -115,7 +117,13 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     _ManagerRole = (Settings["managerRole"].ToString());
 
                     DotNetNuke.Entities.Users.UserInfo USERINFO = DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, this.UserId);
-                    if (USERINFO.IsInRole(_ManagerRole.ToString()))
+
+                    if (!USERINFO.IsInRole(_ManagerRole.ToString()))
+                    {
+                        ButtonCheckInOutReport.Visible = false;
+                        ButtonListUsers.Visible = false;
+                    }
+                    else
                     {
                         ButtonCheckInOutReport.Visible = true;
                         ButtonListUsers.Visible = true;

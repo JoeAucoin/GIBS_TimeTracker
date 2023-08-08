@@ -25,7 +25,7 @@
 </script>
 
 
-<asp:Label ID="LabelDebug" runat="server" Text="LabelDebug"></asp:Label>
+<asp:Label ID="LabelDebug" runat="server" CssClass="dnnFormSuccess" Text=""></asp:Label>
 
 <div style=" float:right">
 <asp:Button ID="btnGetSchedule" runat="server" Text="Button" ResourceKey="btnGetLoginReport" onclick="btnGetSchedule_Click" CssClass="dnnPrimaryAction" /></div>

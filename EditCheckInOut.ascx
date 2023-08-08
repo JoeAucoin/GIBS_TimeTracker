@@ -65,12 +65,15 @@
             var hours = Math.floor(minutes / 60);
             minutes = minutes % 60;
 
-            document.getElementById('<%= txtHoursWorked.ClientID %>').value = hours + ":" + minutes;
+            document.getElementById('<%= txtHoursWorked.ClientID %>').value = hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0');
         }
 
     }
 
 </script>
+
+<asp:Label ID="LabelMessage" runat="server" CssClass="dnnFormMessage dnnFormSuccess" Text="" Visible="false"></asp:Label>
+
 <p style="text-align:center;">
  <b><asp:Label ID="LabelClientInfo" runat="server" Text="LabelClientInfo" /></b>
 <br />
@@ -78,7 +81,10 @@
 <asp:Image ID="ImageIDClient" runat="server" Height="100" CssClass="hover-zoom" />
 </p>
 <asp:HiddenField ID="HiddenFieldTimeTrackerID" runat="server" />
-
+<asp:HiddenField ID="HiddenFieldTTUserID" runat="server" />
+<div style="float:right;">
+<asp:Button ID="ButtonUpdate" runat="server" Text="Update" OnClick="ButtonUpdate_Click" CssClass="dnnPrimaryAction" />
+    </div>
 <div class="dnnForm" id="form-edit-donor">
             <fieldset>
                
@@ -109,6 +115,15 @@
             </fieldset>
         </div>
 
+<div style="float:right;">
 
-<asp:Button ID="ButtonUpdate" runat="server" Text="Update" OnClick="ButtonUpdate_Click" />
-<asp:Button ID="ButtonDelete" runat="server" Text="Delete" OnClick="ButtonDelete_Click" />
+<asp:Button ID="ButtonDelete" runat="server" Text="Delete" OnClick="ButtonDelete_Click" Visible="false" />
+
+<asp:Button ID="ButtonReturnToList" runat="server" Text="Return To User List" OnClick="ButtonReturnToList_Click"/>
+    <asp:Button ID="ButtonReturnToUserRecord" runat="server" Text="Return To User Record" OnClick="ButtonReturnToUserRecord_Click" />
+
+
+
+
+
+</div>

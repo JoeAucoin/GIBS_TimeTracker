@@ -91,6 +91,10 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
         //GetCheckInReport
         public abstract IDataReader GetCheckInReport(DateTime startDate, DateTime endDate);
 
+        // ttUserID
+        public abstract IDataReader GetCheckInReport_ForUser(DateTime startDate, DateTime endDate, int ttUserID);
+
+
         public abstract void IDPhoto_Insert(int ttUserID, byte[] iDPhoto, int createdByUserID);
 
         public abstract IDataReader CheckInOut(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime);

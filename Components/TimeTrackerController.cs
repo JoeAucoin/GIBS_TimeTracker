@@ -32,6 +32,12 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             return CBO.FillCollection<TimeTrackerInfo>(DataProvider.Instance().GetCheckInReport(startDate, endDate));
         }
 
+
+        public List<TimeTrackerInfo> GetCheckInReport_ForUser(DateTime startDate, DateTime endDate, int ttUserID)
+        {
+            return CBO.FillCollection<TimeTrackerInfo>(DataProvider.Instance().GetCheckInReport_ForUser(startDate, endDate, ttUserID));
+        }
+
         public TimeTrackerInfo GetPhotoByUserID(int ttUserID)
         {
 

@@ -1,7 +1,10 @@
-﻿using DotNetNuke.Entities.Modules;
+﻿using DotNetNuke.Abstractions;
+using DotNetNuke.Common;
+using DotNetNuke.Entities.Modules;
 using DotNetNuke.Framework.JavaScriptLibraries;
 using DotNetNuke.Services.Exceptions;
 using GIBS.Modules.GIBS_TimeTracker.Components;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +13,16 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using DotNetNuke.Abstractions.Logging;
+
+
 namespace GIBS.Modules.GIBS_TimeTracker
 {
     public partial class EditCheckInOut : PortalModuleBase
     {
 
         static int _ttid;
+        static int _ttUserID;
 
 
         protected override void OnInit(EventArgs e)
@@ -82,6 +89,13 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                     LabelClientInfo.Text = item.FirstName + ' ' + item.LastName;
                     HiddenFieldTimeTrackerID.Value = item.TimeTrackerID.ToString();
+                    HiddenFieldTTUserID.Value = item.TTUserID.ToString();
+
+                    _ttUserID = Int32.Parse(item.UserID.ToString());
+
+
+            //        string newURL = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString(), "UserId=" + _ttUserID.ToString());
+                   
 
                     LiteralCreatedOnDate.Text = item.CreatedOnDate.ToShortDateString();
                     
@@ -143,6 +157,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 item.UserID = this.UserId;
 
                 controller.CheckInOut_Update(item);
+                LabelMessage.Visible= true;
+                LabelMessage.Text = "Record Updated!";
             }
             catch (Exception ex)
             {
@@ -152,6 +168,24 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
         protected void ButtonDelete_Click(object sender, EventArgs e)
         {
+
+        }
+        
+
+
+        protected void ButtonReturnToList_Click(object sender, EventArgs e)
+        {
+            string newURL = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "ListMembers", "mid=" + ModuleId.ToString());
+            Response.Redirect(newURL);
+
+        }
+
+        protected void ButtonReturnToUserRecord_Click(object sender, EventArgs e)
+        {
+            //ButtonReturnToUserRecord_Click
+            string newURL1 = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString(), "UserId=" + _ttUserID.ToString());
+            Response.Redirect(newURL1);
+
 
         }
     }

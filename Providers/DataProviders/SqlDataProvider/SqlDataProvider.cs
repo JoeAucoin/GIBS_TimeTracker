@@ -179,6 +179,12 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
         }
 
 
+        public override IDataReader GetCheckInReport_ForUser(DateTime startDate, DateTime endDate, int ttUserID)
+        {
+            return (IDataReader)SqlHelper.ExecuteReader(ConnectionString, GetFullyQualifiedName("GetCheckInReport_ForUser"), startDate, endDate, ttUserID);
+        }
+
+
 
         //public abstract void CheckInOut(DateTime workDate, int userID, int ttUserID, DateTime startDate, DateTime endDate);
 

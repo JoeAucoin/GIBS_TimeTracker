@@ -84,18 +84,18 @@ namespace GIBS.Modules.GIBS_TimeTracker
             }
         }
 
-        public string Manager
+        public string ManagerRole
         {
             get
             {
-                if (Settings.Contains("manager"))
-                    return Settings["manager"].ToString();
+                if (Settings.Contains("managerRole"))
+                    return Settings["managerRole"].ToString();
                 return "";
             }
             set
             {
                 var mc = new ModuleController();
-                mc.UpdateTabModuleSetting(TabModuleId, "manager", value.ToString());
+                mc.UpdateTabModuleSetting(TabModuleId, "managerRole", value.ToString());
             }
         }
 

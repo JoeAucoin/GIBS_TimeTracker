@@ -41,7 +41,7 @@
   <fieldset>
               <div class="dnnFormItem">
             <dnn:Label runat="server" ControlName="txtUserId" ID="lblUserId" Suffix=":" ResourceKey="lblUserId" />
-            <asp:TextBox runat="server" ID="txtUserId" TextMode="Password" Width="20%" /><asp:RangeValidator runat="server" Type="Integer"  ID="UserIDRangeValidator" 
+            <asp:TextBox runat="server" ID="txtUserId" Width="160px" /><asp:RangeValidator runat="server" Type="Integer"  ID="UserIDRangeValidator" 
             MinimumValue="0" MaximumValue="999999" ControlToValidate="txtUserId" ErrorMessage="<span style='color:red'>Value must numeric</span>" />
         </div>    
 </fieldset>
@@ -49,12 +49,12 @@
 
 
 
-<div style="float: right;">
+<div style="width:100%;text-align:right;">
     <asp:Button ID="BtnLogin" runat="server" Text="Check In-Out" OnClick="BtnLogin_Click" CssClass="dnnPrimaryAction" />
 
 </div>
 <br />&nbsp;<br />
-<div style="float: right; padding-top:15px;overflow: auto;">
+<div style="width:100%;text-align:right;">
     <asp:Button ID="ButtonCheckInOutReport" runat="server" Visible="false" Text="Login Report" CssClass="dnnSecondaryAction" OnClick="ButtonCheckInOutReport_Click" /> &nbsp; <asp:Button ID="ButtonListUsers" runat="server" Text="List Users" Visible="false" CssClass="dnnSecondaryAction" OnClick="ButtonListUsers_Click" />
 
 </div>

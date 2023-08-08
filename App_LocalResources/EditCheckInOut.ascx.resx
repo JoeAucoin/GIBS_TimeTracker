@@ -121,7 +121,7 @@
     <value>Created On Date</value>
   </data>
   <data name="lblHoursWorked.Text" xml:space="preserve">
-    <value>Hours:Minutes Worked</value>
+    <value>Hours/Minutes Worked</value>
   </data>
   <data name="lblStartTime.Text" xml:space="preserve">
     <value>Start Time</value>

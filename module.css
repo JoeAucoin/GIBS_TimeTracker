@@ -7,6 +7,8 @@
     .hover-zoom:hover {
         -moz-transform: scale(1.1);
         -webkit-transform: scale(1.1);
-        transform: scale(4.6)
+        transform: scale(4.6);
+        position: relative;
+        z-index: 9999;
     }
 

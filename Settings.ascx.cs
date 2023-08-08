@@ -95,9 +95,9 @@ namespace GIBS.Modules.GIBS_TimeTracker
                         ddlReportsRoles.SelectedValue = ReportsRole;
                     }
 
-                    if (Manager != null)
+                    if (ManagerRole != null)
                     {
-                        ddlMergeRoles.SelectedValue = Manager;
+                        ddlMergeRoles.SelectedValue = ManagerRole;
                     }
 
 
@@ -211,7 +211,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 EmailSubject = txtEmailSubject.Text;
                 EmailBCC = txtEmailBCC.Text;
                 ReportsRole = ddlReportsRoles.SelectedValue;
-                Manager = ddlMergeRoles.SelectedValue;
+                ManagerRole = ddlMergeRoles.SelectedValue;
                 ShowSendPassword = cbxShowSendPassword.Checked.ToString();
                 EmailNewUserCredentials = cbxEmailNewUserCredentials.Checked.ToString();
                 ShowDonationHistory = cbxShowDonationHistory.Checked.ToString();
