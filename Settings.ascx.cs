@@ -58,6 +58,12 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     GetRoles();
 
                     //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
+
+                    if (Location != null)
+                    {
+                        ddlLocation.SelectedValue = Location;
+                    }
+
                     if (Settings.Contains("iDCardImagePath"))
                     {
                         txtIDCardImagePath.Text = IDCardImagePath;
@@ -217,6 +223,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 ShowDonationHistory = cbxShowDonationHistory.Checked.ToString();
                 EnableAddNewDonor = cbxEnableAddNewDonor.Checked.ToString();
                 IDCardImagePath = txtIDCardImagePath.Text.ToString();
+                Location = ddlLocation.SelectedValue;
             }
             catch (Exception exc) //Module failed to load
             {

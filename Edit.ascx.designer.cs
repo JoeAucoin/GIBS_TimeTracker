@@ -33,13 +33,13 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected global::System.Web.UI.WebControls.HiddenField hidUserId;
 
         /// <summary>
-        /// ImageIDClient control.
+        /// HyperLinkMakeIDCard control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image ImageIDClient;
+        protected global::System.Web.UI.WebControls.HyperLink HyperLinkMakeIDCard;
 
         /// <summary>
         /// HyperLinkPhotoID control.
@@ -49,6 +49,24 @@ namespace GIBS.Modules.GIBS_TimeTracker
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink HyperLinkPhotoID;
+
+        /// <summary>
+        /// HyperLinkAddCheckInOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink HyperLinkAddCheckInOut;
+
+        /// <summary>
+        /// ImageIDClient control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image ImageIDClient;
 
         /// <summary>
         /// LabelName control.

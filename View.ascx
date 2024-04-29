@@ -61,7 +61,7 @@
   
 <div id="hide-it">
 <p style="text-align:center;"><b>
-        <asp:Label ID="LabelMessage" runat="server" Text="" /></b><br /> <asp:Image ID="ImgInitials" runat="server" Visible="false" Height="140" CssClass="hover-zoom" /></p>
+        <asp:Label ID="LabelMessage" runat="server" CssClass="CheckInMessage" Text="" /></b><br /> <asp:Image ID="ImgInitials" runat="server" Visible="false" Height="140" CssClass="hover-zoom" /></p>
 
 </div>
 

@@ -49,49 +49,65 @@ namespace GIBS.Modules.GIBS_TimeTracker
         }
 
 
-        protected void Page_Init(Object sender, EventArgs e)
-        {
-            foreach (DataGridColumn column in grdUsers.Columns)
-            {
+        //protected void Page_Init(Object sender, EventArgs e)
+        //{
+        //    foreach (DataGridColumn column in grdUsers.Columns)
+        //    {
 
-                if (column.GetType() == typeof(ImageCommandColumn))
-                {
+        //        if (column.GetType() == typeof(ImageCommandColumn))
+        //        {
 
-                    ImageCommandColumn imageColumn = (ImageCommandColumn)column;
+        //            ImageCommandColumn imageColumn = (ImageCommandColumn)column;
 
-                    //Manage Edit Column NavigateURLFormatString                      
-                    if (imageColumn.CommandName == "Edit")
-                    {
-                        //The Friendly URL parser does not like non-alphanumeric characters                          
-                        //so first create the format string with a dummy value and then                          
-                        //replace the dummy value with the FormatString place holder                          
-                        string formatString = EditUrl("UserId", "KEYFIELD", "Edit");
-                       // string formatString = EditUrl("UserId", "KEYFIELD", "Edit", "TabFocus=DonorRecord");
-                        formatString = formatString.Replace("KEYFIELD", "{0}");
-                        imageColumn.NavigateURLFormatString = formatString;
-                    }
+        //            //Manage Edit Column NavigateURLFormatString                      
+        //            if (imageColumn.CommandName == "Edit")
+        //            {
+        //                //The Friendly URL parser does not like non-alphanumeric characters                          
+        //                //so first create the format string with a dummy value and then                          
+        //                //replace the dummy value with the FormatString place holder                          
+        //                string formatString = EditUrl("UserId", "KEYFIELD", "Edit");
+        //               // string formatString = EditUrl("UserId", "KEYFIELD", "Edit", "TabFocus=DonorRecord");
+        //                formatString = formatString.Replace("KEYFIELD", "{0}");
+        //                imageColumn.NavigateURLFormatString = formatString;
+        //            }
 
-                    //CheckInOut
-                    if (imageColumn.CommandName == "CheckInOut")
-                    {
-                        //The Friendly URL parser does not like non-alphanumeric characters                          
-                        //so first create the format string with a dummy value and then                          
-                        //replace the dummy value with the FormatString place holder                          
-                        string formatString1 = Globals.NavigateURL(TabId, "", "UserId=IDFIELD");
+        //            //CheckInOut
+        //            if (imageColumn.CommandName == "CheckInOut")
+        //            {
+        //                //The Friendly URL parser does not like non-alphanumeric characters                          
+        //                //so first create the format string with a dummy value and then                          
+        //                //replace the dummy value with the FormatString place holder                          
+        //                string formatString1 = Globals.NavigateURL(TabId, "", "UserId=IDFIELD");
 
-                        formatString1 = formatString1.Replace("IDFIELD", "{0}");
-                        imageColumn.NavigateURLFormatString = formatString1;
-                    }
+        //                formatString1 = formatString1.Replace("IDFIELD", "{0}");
+        //                imageColumn.NavigateURLFormatString = formatString1;
+        //            }
 
-                    //Localize Image Column Text                     
-                    if (!String.IsNullOrEmpty(imageColumn.CommandName))
-                    {
-                        imageColumn.Text = Localization.GetString(imageColumn.CommandName, this.LocalResourceFile);
-                    }
-                }
-                //column.Visible = isVisible;              
-            }
-        }
+
+        //            if (imageColumn.CommandName == "MakeID")
+        //            {
+        //                //The Friendly URL parser does not like non-alphanumeric characters                          
+        //                //so first create the format string with a dummy value and then                          
+        //                //replace the dummy value with the FormatString place holder
+        //                //
+        //                //   /ctl/MakeID/mid/386?cid=2&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true
+
+        //                string formatString1 = Globals.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
+
+        //                formatString1 = formatString1.Replace("IDFIELD", "{0}");
+                        
+        //                imageColumn.NavigateURLFormatString = formatString1;
+        //            }
+
+        //            //Localize Image Column Text                     
+        //            if (!String.IsNullOrEmpty(imageColumn.CommandName))
+        //            {
+        //                imageColumn.Text = Localization.GetString(imageColumn.CommandName, this.LocalResourceFile);
+        //            }
+        //        }
+        //        //column.Visible = isVisible;              
+        //    }
+        //}
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -220,8 +236,11 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 + "<br />Total Records: " + TotalRecords.ToString();
 
             //           	 Number Of Pages	
-            grdUsers.DataSource = dt;
-            grdUsers.DataBind();
+        //   grdUsers.DataSource = dt;
+        //    grdUsers.DataBind();
+
+            gvUsers.DataSource = dt;
+            gvUsers.DataBind();
 
             ctlPagingControl.TotalRecords = TotalRecords;
             ctlPagingControl.PageSize = PageSize;
@@ -331,7 +350,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 {
                     btnAddNewUser.Enabled = false;
                 }
-
+               
 
             }
             catch (Exception ex)
@@ -415,5 +434,50 @@ namespace GIBS.Modules.GIBS_TimeTracker
             }
         }
 
+        protected void grdUsers_ItemDataBound(object sender, DataGridItemEventArgs e)
+        {
+
+        }
+
+        protected void gvUsers_PageIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        protected void gvUsers_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //Edit
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                HyperLink myHL = (HyperLink)e.Row.FindControl("HyperLinkEditUser");
+                string formatString = EditUrl("ttUserId", "KEYFIELD", "Edit");
+                formatString = formatString.Replace("KEYFIELD", e.Row.Cells[0].Text.ToString());
+                myHL.NavigateUrl = formatString.ToString();
+
+                HyperLink myHLMakeIDCard = (HyperLink)e.Row.FindControl("HyperLinkMakeIDCard");
+                string formatString1 = Globals.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
+                formatString1 = formatString1.Replace("IDFIELD", e.Row.Cells[0].Text.ToString());
+                myHLMakeIDCard.NavigateUrl = formatString1.ToString();
+
+                //HyperLinkCheckInOut
+                HyperLink myHLCheckInOut = (HyperLink)e.Row.FindControl("HyperLinkCheckInOut");
+                string formatString2 = Globals.NavigateURL(TabId, "", "ttUserId=IDFIELD");
+                formatString2 = formatString2.Replace("IDFIELD", e.Row.Cells[0].Text.ToString());
+                myHLCheckInOut.NavigateUrl = formatString2.ToString();
+
+                //HyperLinkAddShift
+                HyperLink myHLAddShift = (HyperLink)e.Row.FindControl("HyperLinkAddShift");
+                string fromatString3 = Globals.NavigateURL(TabId, "EditCheckInOut", "mid", this.ModuleId.ToString(), "ttUserId=IDFIELD");
+                fromatString3 = fromatString3.Replace("IDFIELD", e.Row.Cells[0].Text.ToString());
+                myHLAddShift.NavigateUrl = fromatString3.ToString();
+
+            }
+        }
+
+        protected void gvUsers_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvUsers.PageIndex = e.NewPageIndex;
+            BindData();
+        }
     }
 }

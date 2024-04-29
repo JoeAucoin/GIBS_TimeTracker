@@ -20,15 +20,23 @@ namespace GIBS.Modules.GIBS_TimeTracker
     public partial class CheckInOutReport : PortalModuleBase
     {
 
-        static int _eventMID = 0;
+      //  static int _eventMID = 0;
         private GridViewHelper helper;
         // To show custom operations...
         private List<int> mQuantities = new List<int>();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            txtStartDate.Text = DateTime.Now.AddDays(-7).ToShortDateString();
-            txtEndDate.Text = DateTime.Now.ToShortDateString();
+            if (!IsPostBack)
+            {
+                txtStartDate.Text = DateTime.Now.AddDays(-7).ToShortDateString();
+                txtEndDate.Text = DateTime.Now.ToShortDateString();
+                if (Settings.Contains("location"))
+                {
+                    ddlLocations.SelectedValue = Settings["location"].ToString();
+                }
+                
+            }
         }
 
 
@@ -47,7 +55,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 List<TimeTrackerInfo> items;
                 TimeTrackerController controller = new TimeTrackerController();
 
-                items = controller.GetCheckInReport(Convert.ToDateTime(txtStartDate.Text.ToString()), Convert.ToDateTime(txtEndDate.Text.ToString()));
+                items = controller.GetCheckInReport(Convert.ToDateTime(txtStartDate.Text.ToString()), Convert.ToDateTime(txtEndDate.Text.ToString()), ddlLocations.SelectedValue.ToString());
 
                 gv_Report.DataSource = items;
                 gv_Report.DataBind();

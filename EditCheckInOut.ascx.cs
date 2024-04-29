@@ -62,6 +62,17 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                     }
 
+                    if (Request.QueryString["ttUserId"] != null)
+                    {
+                        _ttUserID = Int32.Parse(Request.QueryString["ttUserId"]);
+                        HiddenFieldTimeTrackerID.Value = "0";
+                        HiddenFieldTTUserID.Value = _ttUserID.ToString();
+
+                        var thisuser = DotNetNuke.Entities.Users.UserController.GetUserById(this.PortalId, _ttUserID);
+                        LabelClientInfo.Text = thisuser.FirstName.ToString() + " " + thisuser.LastName.ToString();
+
+                    }
+
                 }
 
             }
@@ -155,10 +166,26 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 item.StartTime = DateTime.Parse(txtStartTime.Text.ToString());
                 item.EndTime = DateTime.Parse(txtWorkEndDate.Text.ToString());
                 item.UserID = this.UserId;
+                item.Location = Settings["location"].ToString();
 
-                controller.CheckInOut_Update(item);
-                LabelMessage.Visible= true;
-                LabelMessage.Text = "Record Updated!";
+                if (Int32.Parse(HiddenFieldTimeTrackerID.Value.ToString()) > 0)
+                {
+                    controller.CheckInOut_Update(item);
+                    LabelMessage.Visible = true;
+                    LabelMessage.Text = "Record Updated!";
+                }
+                else 
+                { 
+                  
+                    item.TTUserID = Int32.Parse(HiddenFieldTTUserID.Value.ToString());
+                    item.WorkDate = DateTime.Parse(txtStartTime.Text.ToString());
+                    controller.CheckInOutInsert(item);
+                    LiteralCreatedOnDate.Text = DateTime.Now.Date.ToShortDateString();
+                    LabelMessage.Visible = true;
+                    LabelMessage.Text = "Record Inserted!";
+                }
+                
+               
             }
             catch (Exception ex)
             {
@@ -183,7 +210,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void ButtonReturnToUserRecord_Click(object sender, EventArgs e)
         {
             //ButtonReturnToUserRecord_Click
-            string newURL1 = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString(), "UserId=" + _ttUserID.ToString());
+            string newURL1 = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString(), "ttUserId=" + _ttUserID.ToString());
             Response.Redirect(newURL1);
 
 

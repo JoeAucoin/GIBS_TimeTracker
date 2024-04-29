@@ -117,9 +117,9 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
 
 
-                    if (Request.QueryString["UserId"] != null)
+                    if (Request.QueryString["ttUserId"] != null)
                     {
-                        VolunteerUserId = Int32.Parse(Request.QueryString["UserId"]);
+                        VolunteerUserId = Int32.Parse(Request.QueryString["ttUserId"]);
                         hidUserId.Value = VolunteerUserId.ToString();
                         LoadRecord(VolunteerUserId);
 
@@ -174,8 +174,15 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                 //      this.ModuleConfiguration.ModuleControl.ControlTitle = DonationUser.Profile.GetPropertyValue("Company") + " - " + DonationUser.DisplayName;
 
-            
-               
+
+                string formatString1 = Globals.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
+                formatString1 = formatString1.Replace("IDFIELD", RecordID.ToString());
+                HyperLinkMakeIDCard.NavigateUrl = formatString1.ToString();
+
+                string formatString2 = Globals.NavigateURL(TabId, "EditCheckInOut", "mid", this.ModuleId.ToString(), "ttUserId=IDFIELD");
+                formatString2 = formatString2.Replace("IDFIELD", RecordID.ToString());
+                HyperLinkAddCheckInOut.NavigateUrl = formatString2.ToString();
+
 
                 txtFirstName.Text = VolunteerUser.FirstName;
                 txtLastName.Text = VolunteerUser.LastName;
@@ -479,10 +486,10 @@ namespace GIBS.Modules.GIBS_TimeTracker
             try
             {
 
-                if (Request.QueryString["UserId"] != null)
+                if (Request.QueryString["ttUserId"] != null)
                 {
 
-                    VolunteerUserId = Int32.Parse(Request.QueryString["UserId"]);
+                    VolunteerUserId = Int32.Parse(Request.QueryString["ttUserId"]);
                     UpdateRecord(VolunteerUserId);
                 }
                 else

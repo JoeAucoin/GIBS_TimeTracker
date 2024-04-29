@@ -36,7 +36,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
         private string description;
         private bool isActive;
 
-        private string source;
+        private string location;
 
         private bool doNotMail;
 
@@ -81,7 +81,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
 
         // IDPhoto
         private byte[] iDPhoto;
-        private int ttImageID;
+  //      private int ttImageID;
 
 
         // PAGING
@@ -241,10 +241,10 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             set { donationType = value; }
         }
 
-        public string Source
+        public string Location
         {
-            get { return source; }
-            set { source = value; }
+            get { return location; }
+            set { location = value; }
         }
 
         //doNotMail

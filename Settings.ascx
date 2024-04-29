@@ -12,7 +12,13 @@
 
 <div id="GeneralSection" runat="server">   
             
-                    
+	<div class="dnnFormItem">					
+		<dnn:label id="lblLocation" runat="server" controlname="ddlLocation" suffix=":"></dnn:label>
+		<asp:DropDownList ID="ddlLocation" runat="server">
+			<asp:ListItem Text="Pantry" Value="Pantry"></asp:ListItem>
+			<asp:ListItem Text="Second Glance" Value="Second Glance"></asp:ListItem>
+		</asp:DropDownList>				
+	</div>	                    
                     		
 	<div class="dnnFormItem">					
 	<dnn:label id="lblNumPerPage" runat="server" controlname="ddlNumPerPage" suffix=":"></dnn:label>

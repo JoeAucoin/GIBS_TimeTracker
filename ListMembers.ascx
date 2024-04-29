@@ -69,12 +69,76 @@
     </asp:Repeater>
 </asp:Panel>
 
+<asp:GridView ID="gvUsers" runat="server" AutoGenerateColumns="false" Width="100%" GridLines="None" CssClass="table table-striped table-bordered table-list" 
+    OnPageIndexChanged="gvUsers_PageIndexChanged" OnPageIndexChanging="gvUsers_PageIndexChanging" DataKeyNames="UserID" OnRowDataBound="gvUsers_RowDataBound" AllowCustomPaging="true">
+   
+    <Columns>
+        <asp:BoundField HeaderText="ID" DataField="USERID" />
+
+        <asp:TemplateField HeaderText="Edit" ItemStyle-Width="60px">
+            <ItemTemplate>
+            <asp:HyperLink ID="HyperLinkEditUser" runat="server" 
+                NavigateUrl="" >
+                <asp:Image ID="Image1" ImageUrl="~/DesktopModules/GIBS_TimeTracker/images/edit-32.png" AlternateText="Edit" ToolTip="Edit" runat="server" /> </asp:HyperLink>
+            </ItemTemplate>
+        </asp:TemplateField>
+
+        <asp:TemplateField HeaderText="Make ID Card" ItemStyle-Width="66px">
+            <ItemTemplate>
+            <asp:HyperLink ID="HyperLinkMakeIDCard" runat="server" 
+                NavigateUrl=""  Target="_blank" ><asp:Image ID="Image2" AlternateText="Make ID Card" ImageUrl="~/Icons/Sigma/Rt_32x32_Standard.png" ToolTip="Make ID Card" runat="server" /></asp:HyperLink>
+            </ItemTemplate>
+        </asp:TemplateField>
+
+        <asp:TemplateField HeaderText="Check In-Out" ItemStyle-Width="66px">
+            <ItemTemplate>
+            <asp:HyperLink ID="HyperLinkCheckInOut" runat="server" 
+                NavigateUrl="" ><asp:Image ID="Image3" ImageUrl="~/Icons/Sigma/Refresh_32x32_Standard.png" AlternateText="Check in-Out" ToolTip="Check in-Out" runat="server" /></asp:HyperLink>
+            </ItemTemplate>
+        </asp:TemplateField>
+        <asp:TemplateField HeaderText="Add Shift" ItemStyle-Width="66px">
+            <ItemTemplate>
+            <asp:HyperLink ID="HyperLinkAddShift" runat="server" 
+                NavigateUrl="" ><asp:Image ID="Image4" ImageUrl="~/Icons/Sigma/Add_32X32_Standard.png" AlternateText="Add Shift" ToolTip="Add Shift" runat="server" /></asp:HyperLink>
+            </ItemTemplate>
+        </asp:TemplateField>
+
+        <asp:TemplateField HeaderText="Photo" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center" Visible="false">
+            <ItemTemplate><asp:Image ID="PhotoID" CssClass="hover-zoom" runat="server" Height="40px" ImageUrl='<%# "data:image/png;base64," + Convert.ToBase64String((byte[])Eval("IDPhoto"))%>'></asp:Image>       
+            </ItemTemplate>
+        </asp:TemplateField>
+
+        
+        <asp:BoundField HeaderText="FirstName" DataField="FirstName" />
+        <asp:BoundField HeaderText="LastName" DataField="LastName" />
+        <asp:BoundField HeaderText="Email" DataField="Email" />
+        <asp:BoundField HeaderText="DisplayName" DataField="DisplayName" Visible="false" />
+        <asp:BoundField HeaderText="Street" DataField="Street" Visible="false" />
+        <asp:BoundField HeaderText="City" DataField="City" Visible="false" />
+         <asp:TemplateField HeaderText="Address" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Left">
+             <ItemTemplate>
+                 <asp:Label ID="FullAddress" Text='<%# Eval("Street") + ", " + Eval("City") + ", " + GetStateLookup(Eval("State")) + " " + Eval("PostalCode") %>'
+                    runat="server" />
+             </ItemTemplate>
+             </asp:TemplateField>
+
+    </Columns>
+
+    
+    </asp:GridView>
+
+
+
+<div style="text-align: center; margin: 0 auto;">
+    <dnn:PagingControl ID="ctlPagingControl" runat="server" Visible="false" CssClass="dnnGridHeader" Mode="URL"
+        BorderWidth="2px" BorderColor="Black"></dnn:PagingControl>
+</div>
 
 
 <asp:DataGrid ID="grdUsers" AutoGenerateColumns="false" Width="100%" CellPadding="2"
-    GridLines="None" CssClass="table table-striped table-bordered table-list" runat="server" 
+    GridLines="None" CssClass="table table-striped table-bordered table-list" runat="server"  OnItemDataBound="grdUsers_ItemDataBound"
     OnPageIndexChanged="dnnGrid_PageIndexChanged">
-    <PagerStyle CssClass="NormalBold" />
+    
     <HeaderStyle HorizontalAlign="Center" Font-Bold="true" />
     <ItemStyle CssClass="dnnGridItem" />
     <AlternatingItemStyle CssClass="dnnGridAltItem" />
@@ -82,8 +146,12 @@
     <Columns>
         <dnn:ImageCommandColumn CommandName="Edit" ImageURL="~/DesktopModules/GIBS_TimeTracker/images/edit-32.png" EditMode="URL" ItemStyle-Width="60px"
             HeaderText="Edit" KeyField="UserID" />
-		        <dnn:ImageCommandColumn CommandName="CheckInOut" ImageURL="~/Icons/Sigma/Refresh_32x32_Standard.png" EditMode="URL" ItemStyle-Width="60px"
-            HeaderText="Check In-Out" KeyField="UserID" />      
+		<dnn:ImageCommandColumn CommandName="CheckInOut" ImageURL="~/Icons/Sigma/Refresh_32x32_Standard.png" EditMode="URL" ItemStyle-Width="60px"
+        HeaderText="Check In-Out" KeyField="UserID" />      
+		    <dnn:ImageCommandColumn CommandName="MakeID" ImageURL="~/Icons/Sigma/Rt_32x32_Standard.png" EditMode="URL" ItemStyle-Width="60px"
+        HeaderText="Make ID Card" KeyField="UserID" />  
+
+
         
 <asp:TemplateColumn HeaderText="Photo" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center">    
             <ItemTemplate><asp:Image ID="PhotoID" CssClass="hover-zoom" runat="server" Height="40px" ImageUrl='<%# "data:image/png;base64," + Convert.ToBase64String((byte[])Eval("IDPhoto"))%>'></asp:Image>       
@@ -96,17 +164,8 @@
         <dnn:TextColumn DataField="Email" HeaderText="Email" Visible="true" />
         <dnn:TextColumn DataField="DisplayName" HeaderText="DisplayName" Visible="false" />
         <dnn:TextColumn DataField="Street" HeaderText="Street" Visible="false" />
-        <asp:TemplateColumn HeaderText="Address">
-            <ItemTemplate>
-                <asp:Label ID="FullAddress" Text='<%# Eval("Street") + ", " + Eval("City") + ", " + GetStateLookup(Eval("State")) + " " + Eval("PostalCode") %>'
-                    runat="server" />
-            </ItemTemplate>
-        </asp:TemplateColumn>
+       
     </Columns>
     <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
     <SelectedItemStyle BackColor="#FFCC66" Font-Bold="True" ForeColor="Navy" />
 </asp:DataGrid>
-<div style="text-align: center; margin: 0 auto;">
-    <dnn:PagingControl ID="ctlPagingControl" runat="server" Visible="false" CssClass="dnnGridHeader"
-        BorderWidth="2px" BorderColor="Black"></dnn:PagingControl>
-</div>

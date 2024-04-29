@@ -1,0 +1,120 @@
+﻿/****** Object:  StoredProcedure [dbo].[GIBS_TimeTracker_CloseOpenTimeCards]    Script Date: 2/17/2024 12:41:13 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_TimeTracker_CloseOpenTimeCards]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_TimeTracker_CloseOpenTimeCards]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_TimeTracker_CloseOpenTimeCards]    Script Date: 2/17/2024 12:41:13 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		Joseph Aucoin
+-- Create date: 02/17/2024
+-- Description: Close Open TimeCards
+-- =============================================
+CREATE PROCEDURE [dbo].[GIBS_TimeTracker_CloseOpenTimeCards]
+	-- Add the parameters for the stored procedure here
+	@AddHours int = NULL
+	--<@Param2, sysname, @p2> <Datatype_For_Param2, , int> = <Default_Value_For_Param2, , 0>
+AS
+BEGIN
+
+Declare  @LOCAddHours int
+SET @LOCAddHours = @AddHours
+
+if(@LOCAddHours='0' or @LOCAddHours is null)
+begin
+	set @LOCAddHours = 3;
+end
+
+
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+   
+UPDATE [dbo].[GIBS_TimeTracker]
+   SET
+  
+      [EndTime] = DATEADD(hour,@LOCAddHours, StartTime)
+      ,[TotalTime] = @LOCAddHours
+      ,[WorkEndDate] = WorkDate
+    
+      ,[LastModifiedByUserID] = -1
+      ,[LastModifiedOnDate] = GetDate()
+ WHERE  EndTime is null 
+ AND WorkDate < CAST(GETDATE() AS Date)
+
+ 
+END
+GO
+
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_TimeTracker_CheckInOutInsert]    Script Date: 2/17/2024 2:23:29 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_TimeTracker_CheckInOutInsert]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_TimeTracker_CheckInOutInsert]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_TimeTracker_CheckInOutInsert]    Script Date: 2/17/2024 2:23:29 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [dbo].[GIBS_TimeTracker_CheckInOutInsert]
+(
+    @WorkDate date,
+	@UserID int,
+	@TTUserID int,
+    @StartTime datetime,
+	@EndTime datetime
+)
+AS
+BEGIN
+
+	Declare @LastModifiedOnDate datetime
+	set @LastModifiedOnDate = GETDATE();
+	Declare @WorkEndDate date
+	Set @WorkEndDate = @EndTime
+
+
+
+	INSERT INTO [dbo].[GIBS_TimeTracker]
+           ([WorkDate]
+           ,[UserID]
+           ,[StartTime]  
+		   , [EndTime] 
+		   , WorkEndDate
+           ,[CreatedOnDate]
+           ,[CreatedByUserID]
+		   ,TotalTime
+           )
+     VALUES
+           ( @WorkDate
+           ,@TTUserID
+           ,@StartTime    
+		   , @EndTime
+		   ,@WorkEndDate
+           ,GETDATE()
+           ,@UserID   
+		   ,DATEDIFF(MINUTE, @StartTime, @EndTime)/60.0
+		 )
+
+	
+
+Select 1 as CheckInOut
+
+
+END
+GO
+
+

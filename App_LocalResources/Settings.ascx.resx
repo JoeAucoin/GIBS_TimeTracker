@@ -147,6 +147,9 @@
   <data name="lblIDCardImagePath.Text" xml:space="preserve">
     <value>ID Card Image Path</value>
   </data>
+  <data name="lblLocation.Text" xml:space="preserve">
+    <value>Location</value>
+  </data>
   <data name="lblMergeUserRole.Text" xml:space="preserve">
     <value>Manage Role</value>
   </data>

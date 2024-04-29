@@ -17,7 +17,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             //check we have some content to update
             if (info.EndTime != null)
             {
-                DataProvider.Instance().CheckInOut_Update(info.TimeTrackerID, info.UserID, info.StartTime, info.EndTime);
+                DataProvider.Instance().CheckInOut_Update(info.TimeTrackerID, info.UserID, info.StartTime, info.EndTime, info.Location);
             }
         }
 
@@ -27,9 +27,9 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
         }
         //GetCheckInReport
 
-        public List<TimeTrackerInfo> GetCheckInReport(DateTime startDate, DateTime endDate)
+        public List<TimeTrackerInfo> GetCheckInReport(DateTime startDate, DateTime endDate, string location)
         {
-            return CBO.FillCollection<TimeTrackerInfo>(DataProvider.Instance().GetCheckInReport(startDate, endDate));
+            return CBO.FillCollection<TimeTrackerInfo>(DataProvider.Instance().GetCheckInReport(startDate, endDate, location));
         }
 
 
@@ -67,11 +67,24 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             if (info.TTUserID > 0)
             {
               //  DataProvider.Instance().CheckInOut(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime);
-                return CBO.FillObject<TimeTrackerInfo>(DataProvider.Instance().CheckInOut(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime));
+                return CBO.FillObject<TimeTrackerInfo>(DataProvider.Instance().CheckInOut(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime, info.Location));
             }
             else
                 return null;
             
+        }
+
+        public TimeTrackerInfo CheckInOutInsert(TimeTrackerInfo info)
+        {
+            //check we have some content to update
+            if (info.TTUserID > 0)
+            {
+                //  DataProvider.Instance().CheckInOutInsert(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime);
+                return CBO.FillObject<TimeTrackerInfo>(DataProvider.Instance().CheckInOutInsert(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime, info.Location));
+            }
+            else
+                return null;
+
         }
 
 

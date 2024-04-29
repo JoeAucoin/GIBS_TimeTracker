@@ -112,7 +112,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     else
                     {
                         ImageIDClient.Visible = false;
-                        HyperLinkMakeID.Visible = false;
+                   //     HyperLinkMakeID.Visible = false;
                     }
 
                 }

@@ -24,13 +24,31 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected global::System.Web.UI.WebControls.Label LabelClientInfo;
 
         /// <summary>
-        /// Button1 control.
+        /// HiddenFieldFirstName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.HiddenField HiddenFieldFirstName;
+
+        /// <summary>
+        /// ButtonPhotoID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonPhotoID;
+
+        /// <summary>
+        /// ButtonNoPhotoID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonNoPhotoID;
 
         /// <summary>
         /// HyperLinkPDF control.

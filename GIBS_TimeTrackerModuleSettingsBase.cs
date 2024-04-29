@@ -23,7 +23,23 @@ namespace GIBS.Modules.GIBS_TimeTracker
         /// to the user
         /// </summary>
 
-        
+
+        public string Location
+        {
+            get
+            {
+                if (Settings.Contains("location"))
+                    return Settings["location"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateTabModuleSetting(TabModuleId, "location", value.ToString());
+            }
+
+        }
+
         public string IDCardImagePath
         {
             get

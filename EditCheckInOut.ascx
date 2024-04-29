@@ -75,7 +75,7 @@
 <asp:Label ID="LabelMessage" runat="server" CssClass="dnnFormMessage dnnFormSuccess" Text="" Visible="false"></asp:Label>
 
 <p style="text-align:center;">
- <b><asp:Label ID="LabelClientInfo" runat="server" Text="LabelClientInfo" /></b>
+ <b><asp:Label ID="LabelClientInfo" runat="server" Text="LabelClientInfo" CssClass="VolunteerName" /></b>
 <br />
 
 <asp:Image ID="ImageIDClient" runat="server" Height="100" CssClass="hover-zoom" />

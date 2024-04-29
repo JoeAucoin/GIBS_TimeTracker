@@ -114,13 +114,13 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected global::System.Web.UI.WebControls.Repeater rptLetterSearch;
 
         /// <summary>
-        /// grdUsers control.
+        /// gvUsers control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataGrid grdUsers;
+        protected global::System.Web.UI.WebControls.GridView gvUsers;
 
         /// <summary>
         /// ctlPagingControl control.
@@ -130,5 +130,14 @@ namespace GIBS.Modules.GIBS_TimeTracker
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DotNetNuke.UI.WebControls.PagingControl ctlPagingControl;
+
+        /// <summary>
+        /// grdUsers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid grdUsers;
     }
 }

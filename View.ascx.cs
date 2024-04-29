@@ -50,6 +50,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
         static string _ReportsRole = "";
         static string _ManagerRole = "";
+        static string _Location;
 
         protected override void OnInit(EventArgs e)
         {
@@ -73,9 +74,9 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 {
                     LoadSettings();
 
-                    if (Request.QueryString["UserId"] != null)
+                    if (Request.QueryString["ttUserId"] != null)
                     {
-                        txtUserId.Text = Request.QueryString["UserId"];
+                        txtUserId.Text = Request.QueryString["ttUserId"];
                         BtnLogin_Click(null,null);
                     }
                 }
@@ -90,22 +91,36 @@ namespace GIBS.Modules.GIBS_TimeTracker
         {
             try
             {
+                if (Settings.Contains("location"))
+                {
+                    _Location = (Settings["location"].ToString());
+                }
+                else
+                {
+                    _Location = "";
+                }
 
                 if (Settings.Contains("reportsRole"))
                 {
                     _ReportsRole = (Settings["reportsRole"].ToString());
                     
-                    DotNetNuke.Entities.Users.UserInfo USERINFO = DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, this.UserId);
-                    if (!USERINFO.IsInRole(_ReportsRole.ToString()))
+                    if(UserId > 0)
                     {
-                        ButtonCheckInOutReport.Visible = false;
-                        ButtonListUsers.Visible = false;
+                        DotNetNuke.Entities.Users.UserInfo USERINFO = DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, this.UserId);
+                        if (!USERINFO.IsInRole(_ReportsRole.ToString()))
+                        {
+                            ButtonCheckInOutReport.Visible = false;
+                            ButtonListUsers.Visible = false;
+                        }
+                        else
+                        {
+                            ButtonCheckInOutReport.Visible = true;
+                            ButtonListUsers.Visible = true;
+                        }
                     }
-                    else
-                    {
-                        ButtonCheckInOutReport.Visible = true;
-                        ButtonListUsers.Visible = true;
-                    }
+
+
+
                 }
                 else
                 {
@@ -116,17 +131,20 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 {
                     _ManagerRole = (Settings["managerRole"].ToString());
 
-                    DotNetNuke.Entities.Users.UserInfo USERINFO = DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, this.UserId);
+                    if (UserId > 0)
+                    {
+                        DotNetNuke.Entities.Users.UserInfo USERINFO = DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, this.UserId);
 
-                    if (!USERINFO.IsInRole(_ManagerRole.ToString()))
-                    {
-                        ButtonCheckInOutReport.Visible = false;
-                        ButtonListUsers.Visible = false;
-                    }
-                    else
-                    {
-                        ButtonCheckInOutReport.Visible = true;
-                        ButtonListUsers.Visible = true;
+                        if (!USERINFO.IsInRole(_ManagerRole.ToString()))
+                        {
+                            ButtonCheckInOutReport.Visible = false;
+                            ButtonListUsers.Visible = false;
+                        }
+                        else
+                        {
+                            ButtonCheckInOutReport.Visible = true;
+                            ButtonListUsers.Visible = true;
+                        }
                     }
 
                 }
@@ -136,8 +154,6 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
 
 
-                // managerRole
-                //_ManagerRole
 
 
             }
@@ -212,6 +228,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     item.StartTime = DateTime.Now;
                     item.EndTime = DateTime.Now;
                     item.UserID = this.UserId;
+                    item.Location = _Location.ToString();
 
                     //  controller.CheckInOut(item);
 

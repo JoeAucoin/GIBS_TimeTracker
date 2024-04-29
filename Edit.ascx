@@ -57,7 +57,14 @@
 
 <asp:Label ID="lblDebug" runat="server" Visible="false" />
 <asp:HiddenField ID="hidUserId" runat="server" />
-<div class="pull-right"><asp:Image ID="ImageIDClient" runat="server" Height="70" CssClass="hover-zoom" /> <asp:HyperLink ID="HyperLinkPhotoID" runat="server" Visible="false" CssClass="dnnSecondaryAction">Manage PhotoID</asp:HyperLink></div>
+<div class="pull-right">
+    <asp:HyperLink ID="HyperLinkMakeIDCard" runat="server" 
+                NavigateUrl="" Text="Make ID Card" Target="_blank" CssClass="dnnSecondaryAction" ></asp:HyperLink>&nbsp;&nbsp;
+    <asp:HyperLink ID="HyperLinkPhotoID" runat="server" Visible="false" CssClass="dnnSecondaryAction">Manage PhotoID</asp:HyperLink>&nbsp;&nbsp;
+		<asp:HyperLink ID="HyperLinkAddCheckInOut" runat="server" 
+                NavigateUrl="" Text="Add a CheckInOut" Target="_blank" CssClass="dnnSecondaryAction" ></asp:HyperLink>&nbsp;&nbsp;
+<asp:Image ID="ImageIDClient" runat="server" Height="70" CssClass="hover-zoom" /> 
+</div>
 <h2><asp:Label ID="LabelName" runat="server" Text=""></asp:Label></h2>
 
  
@@ -195,7 +202,7 @@
       
       
         <asp:BoundField HeaderText="Name" DataField="DisplayName" SortExpression="DisplayName" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
-
+                <asp:BoundField HeaderText="Location" DataField="Location" Visible="true" SortExpression="Location" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Left"></asp:BoundField>
 		<asp:BoundField HeaderText="StartTime" DataField="StartTime" SortExpression="StartTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
         <asp:BoundField HeaderText="EndTime" DataField="EndTime" SortExpression="EndTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
 		<asp:BoundField HeaderText="Hours" DataField="TotalTime" SortExpression="TotalTime" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>

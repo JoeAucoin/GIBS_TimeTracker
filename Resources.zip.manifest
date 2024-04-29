@@ -9,8 +9,56 @@
       <name>Documentation.html</name>
     </file>
     <file>
+      <path>images/</path>
+      <name>edit-32.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>no.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>search.png</name>
+    </file>
+    <file>
+      <path>images/</path>
+      <name>yes.png</name>
+    </file>
+    <file>
+      <path>JavaScript/</path>
+      <name>jquery.maskedinput.js</name>
+    </file>
+    <file>
+      <path>JavaScript/</path>
+      <name>jquery.timepicker.min.js</name>
+    </file>
+    <file>
+      <path>JavaScript/</path>
+      <name>jquery.watermarkinput.js</name>
+    </file>
+    <file>
+      <path>JavaScript/</path>
+      <name>SigPlus.js</name>
+    </file>
+    <file>
+      <path>JavaScript/</path>
+      <name>SigWebTablet.js</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>CheckInOutReport.ascx.resx</name>
+    </file>
+    <file>
       <path>App_LocalResources/</path>
       <name>Edit.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>EditCheckInOut.ascx.resx</name>
+    </file>
+    <file>
+      <path>App_LocalResources/</path>
+      <name>ListMembers.ascx.resx</name>
     </file>
     <file>
       <path>App_LocalResources/</path>
@@ -22,11 +70,31 @@
     </file>
     <file>
       <path />
+      <name>Camera.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>CheckInOutReport.ascx</name>
+    </file>
+    <file>
+      <path />
       <name>Edit.ascx</name>
     </file>
     <file>
       <path />
+      <name>EditCheckInOut.ascx</name>
+    </file>
+    <file>
+      <path />
       <name>License.txt</name>
+    </file>
+    <file>
+      <path />
+      <name>ListMembers.ascx</name>
+    </file>
+    <file>
+      <path />
+      <name>MakeID.ascx</name>
     </file>
     <file>
       <path />

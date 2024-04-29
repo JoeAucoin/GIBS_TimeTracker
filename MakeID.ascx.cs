@@ -55,6 +55,20 @@ namespace GIBS.Modules.GIBS_TimeTracker
             }
             LoadSettings();
             FillClientRecord(ttUserID);
+
+            //AutoIDCard
+
+            if (Request.QueryString["AutoIDCard"] != null)
+            {
+                if (Request.QueryString["AutoIDCard"] == "true")
+                {
+                    ButtonPhotoID.Visible = false;
+                    ButtonReturnToClientManager.Visible = false;
+                    ButtonNoPhotoID.Visible=false;
+                    MakeIDCard2(ttUserID.ToString());
+                    DeleteImages();
+                }
+            }
         }
 
         public void FillClientRecord(int clientID)
@@ -71,6 +85,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 {
 
                     LabelClientInfo.Text = item.FirstName + ' ' + item.LastName.Substring(0,1).ToString();
+                    HiddenFieldFirstName.Value = item.FirstName;
                     //  LabelClientInfo.Text += item.ClientAddress + ", " + item.ClientTown + ", " + item.ClientState + " " + item.ClientZipCode;
                     if (item.IDPhoto != null)
                     {
@@ -96,31 +111,17 @@ namespace GIBS.Modules.GIBS_TimeTracker
                         ms.Close();
                         file.Close();
                         file.Dispose();
-
-                        // RESIZE THE IMAGE
-                        ////System.Drawing.Image original = System.Drawing.Image.FromFile(_ClientPhoto);
-                        ////System.Drawing.Image resized = ResizeImage(original, new Size(150, 150));
-                        ////FileStream fileStream = new FileStream(PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + clientID.ToString() + "rs.jpg", FileMode.Create); //I use file stream instead of Memory stream here
-
-
-                        ////resized.Save(fileStream, ImageFormat.Jpeg);
-                        ////original.Dispose();
-                        ////fileStream.Dispose();
-                        ////fileStream.Close(); //close after use
-
-                        //file.Close();
-
-                        //      _ClientPhotoRS = PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + clientID.ToString() + "rs.jpg";
-
-                        // CREATE THE BARCODE
-                        string s = clientID.ToString().PadLeft(11, '0');
-                        CreateBarCode(s.ToString());
+                        
 
                     }
                     else
                     {
                         ImageIDClient.Visible = false;
                     }
+
+                    // CREATE THE BARCODE
+                    string s = clientID.ToString().PadLeft(11, '0');
+                    CreateBarCode(s.ToString());
 
                 }
                 else
@@ -159,9 +160,16 @@ namespace GIBS.Modules.GIBS_TimeTracker
         }
 
 
-        protected void Button1_Click(object sender, EventArgs e)
+        protected void ButtonPhotoID_Click(object sender, EventArgs e)
         {
             MakeIDCard(ttUserID.ToString());
+
+            DeleteImages();
+        }
+
+        protected void ButtonNoPhotoID_Click(object sender, EventArgs e)
+        {
+            MakeIDCard2(ttUserID.ToString());
 
             DeleteImages();
         }
@@ -228,11 +236,14 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 MigraDoc.DocumentObjectModel.Tables.Cell cell2 = row1.Cells[1];
                 //      row1.KeepWith = 1;
                 cell1.Format.Alignment = ParagraphAlignment.Center;
+                cell1.Format.Font.Color = Colors.Blue;
+                cell1.Format.Font.Size = 16;
 
                 cell1.AddParagraph(LabelClientInfo.Text.ToString());
 
 
                 cell2.Format.Alignment = ParagraphAlignment.Center;
+                cell2.Format.Font.Color = Colors.Blue;
                 cell2.AddParagraph(ttUserID.ToString());
 
 
@@ -379,14 +390,11 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
 
 
-
-                // Save and show the document
-                //  pdfRenderer.PdfDocument.Save("TestDocument.pdf");
-                //         Process.Start("explorer.exe", _PdfFilename);
-
+                string format1 = "Mddyyyyhhmmsstt";
+                var myTimeStamp = String.Format("{0}", DateTime.Now.ToString(format1));
 
                 HyperLinkPDF.Visible = true;
-                HyperLinkPDF.NavigateUrl = PortalSettings.HomeDirectory + _IDCardImagePath.ToString() + "ID" + ttUserID.ToString() + ".pdf";
+                HyperLinkPDF.NavigateUrl = PortalSettings.HomeDirectory + _IDCardImagePath.ToString() + "ID" + ttUserID.ToString() + ".pdf?v=" + myTimeStamp.ToString();
 
 
 
@@ -398,24 +406,233 @@ namespace GIBS.Modules.GIBS_TimeTracker
             }
         }
 
-        public void LoadSettings()
+        public void MakeIDCard2(string itemID)
         {
             try
             {
 
-                //   GIBS_TimeTrackerModuleSettingsBase
-                //   FBClientsSettings settingsData = new FBClientsSettings(this.TabModuleId);
 
-                //     _IDCardImagePath = "";
-                //if (settingsData.IDCardImagePath != null)
-                //{
-                //    _IDCardImagePath = settingsData.IDCardImagePath.ToString();
-                //}
-                //else
-                //{
-                //    _IDCardImagePath = "";
+                string myPortalName = this.PortalSettings.PortalName.ToString();
 
-                //}
+                 
+
+                Document document = new Document();
+                document.Info.Author = "Joseph Aucoin";
+                document.Info.Keywords = "Family Pantry ID Card";
+                document.Info.Title = myPortalName.ToString() + " ID Card";
+
+                // Get the A4 page size
+                MigraDoc.DocumentObjectModel.Unit width, height;
+                PageSetup.GetPageSize(PageFormat.A6, out width, out height);
+
+                width = (MigraDoc.DocumentObjectModel.Unit.FromMillimeter(86));
+                height = (MigraDoc.DocumentObjectModel.Unit.FromMillimeter(54));
+
+                // Add a section to the document and configure it such that it will be in the centre
+                // of the page
+                Section section = document.AddSection();
+                section.PageSetup.PageHeight = height;
+                section.PageSetup.PageWidth = width;
+                section.PageSetup.LeftMargin = (MigraDoc.DocumentObjectModel.Unit.FromMillimeter(2));
+                section.PageSetup.RightMargin = (MigraDoc.DocumentObjectModel.Unit.FromMillimeter(2));
+                section.PageSetup.TopMargin = (MigraDoc.DocumentObjectModel.Unit.FromMillimeter(2));
+                section.PageSetup.BottomMargin = (MigraDoc.DocumentObjectModel.Unit.FromMillimeter(2));
+
+
+                //++++++++++++++++++++++++++++++
+                //++++++++++++++++++++++++++++++
+                //++++++++++++++++++++++++++++++
+                // CREATE THE TABLE  HeaderTable
+                //  HeaderTable
+
+
+                MigraDoc.DocumentObjectModel.Tables.Table HeaderTable = new MigraDoc.DocumentObjectModel.Tables.Table();
+                HeaderTable.Borders.Width = 0; // Default to show borders 1 pixel wide Column
+                HeaderTable.LeftPadding = MigraDoc.DocumentObjectModel.Unit.FromMillimeter(0);
+                HeaderTable.RightPadding = MigraDoc.DocumentObjectModel.Unit.FromMillimeter(0);
+                HeaderTable.Borders.Left.Visible = true;
+                HeaderTable.Borders.Right.Visible = true;
+
+
+
+                Column column0 = HeaderTable.AddColumn(MigraDoc.DocumentObjectModel.Unit.FromMillimeter(82));
+             //   Column column1 = HeaderTable.AddColumn(MigraDoc.DocumentObjectModel.Unit.FromMillimeter(41));
+
+
+                MigraDoc.DocumentObjectModel.Tables.Row row1 = HeaderTable.AddRow();
+                //      row1.Borders.Width = 1;
+                row1.Height = MigraDoc.DocumentObjectModel.Unit.FromMillimeter(11);
+                MigraDoc.DocumentObjectModel.Tables.Cell cell1 = row1.Cells[0];
+             //   MigraDoc.DocumentObjectModel.Tables.Cell cell2 = row1.Cells[1];
+                //      row1.KeepWith = 1;
+                cell1.Format.Alignment = ParagraphAlignment.Center;
+                cell1.Borders.Visible = false;
+                cell1.Format.Font.Color = Colors.Blue;
+                cell1.Format.Font.Size = 26;
+
+              //  cell1.AddParagraph(HiddenFieldFirstName.Value.ToString());
+                cell1.AddParagraph(LabelClientInfo.Text.ToString());
+
+
+                //      cell2.Format.Alignment = ParagraphAlignment.Center;
+                //      cell2.AddParagraph(ttUserID.ToString());
+
+
+
+                /////// ROW 2 ////////
+                ///////
+
+                Row row2 = HeaderTable.AddRow();
+                row2.Height = MigraDoc.DocumentObjectModel.Unit.FromMillimeter(24.00);
+              
+                MigraDoc.DocumentObjectModel.Tables.Cell idLogoCell = row2.Cells[0];
+
+                idLogoCell.Format.Alignment = ParagraphAlignment.Center;
+                idLogoCell.Borders.Width = 0;
+                idLogoCell.Borders.Left.Visible = true;
+                idLogoCell.Borders.Right.Visible = true;
+                idLogoCell.Borders.Bottom.Visible = true;
+
+                string myidLogo = PortalSettings.HomeDirectoryMapPath + "IDCard2.png";
+
+
+                // LockAspectRatio = true;
+                MigraDoc.DocumentObjectModel.Shapes.Image imageLogo = idLogoCell.AddParagraph().AddImage(myidLogo.ToString());
+                imageLogo.Width = "6.0cm";
+                imageLogo.LockAspectRatio = true;
+
+                /////// ROW 3 ////////
+                ///////
+                Row row3 = HeaderTable.AddRow();
+
+                MigraDoc.DocumentObjectModel.Tables.Cell barCodeCell = row3.Cells[0];
+
+            //    barCodeCell.MergeRight = 1;
+                barCodeCell.AddParagraph().AddImage(_BarCodeImage.ToString());
+                barCodeCell.Format.Alignment = ParagraphAlignment.Center;
+
+                barCodeCell.Borders.Width = 0;
+                barCodeCell.Borders.Left.Visible = false;
+                barCodeCell.Borders.Right.Visible = false;
+                barCodeCell.Borders.Bottom.Visible = false;
+
+                /////// ROW 4 ////////
+                ///////
+                Row row4 = HeaderTable.AddRow();
+                row4.Height = MigraDoc.DocumentObjectModel.Unit.FromMillimeter(4);
+                MigraDoc.DocumentObjectModel.Tables.Cell ClientIDCell = row4.Cells[0];
+
+                ClientIDCell.Format.Alignment = ParagraphAlignment.Center;
+                ClientIDCell.Format.Font.Size = 12;
+
+                ClientIDCell.AddParagraph(ttUserID.ToString());
+
+                section.Add(HeaderTable);
+
+
+         
+
+                // Create a renderer
+                PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer();
+
+                // Associate the MigraDoc document with a renderer
+                pdfRenderer.Document = document;
+
+                // Layout and render document to PDF
+                pdfRenderer.RenderDocument();
+
+
+
+                _PdfFilename = PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + "ID" + ttUserID.ToString() + ".pdf";
+
+                if (File.Exists(_PdfFilename))
+                {
+                    File.Delete(_PdfFilename);
+                }
+
+                pdfRenderer.PdfDocument.Save(_PdfFilename);
+
+
+
+
+
+
+                string format = "Mddyyyyhhmmsstt";
+                var myTimeStamp = String.Format("{0}", DateTime.Now.ToString(format));
+                // ?v=" + myTimeStamp.ToString();
+
+                HyperLinkPDF.Visible = true;
+                HyperLinkPDF.NavigateUrl = PortalSettings.HomeDirectory + _IDCardImagePath.ToString() + "ID" + ttUserID.ToString() + ".pdf?v=" + myTimeStamp.ToString();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ProcessModuleLoadException(this, ex);
+
+            }
+        }
+
+
+        public static void DefineStyles(Document document)
+        {
+            // Get the predefined style Normal.
+            Style style = document.Styles["Normal"];
+            // Because all styles are derived from Normal, the next line changes the 
+            // font of the whole document. Or, more exactly, it changes the font of
+            // all styles and paragraphs that do not redefine the font.
+            style.Font.Name = "Times New Roman";
+
+            // Heading1 to Heading9 are predefined styles with an outline level. An outline level
+            // other than OutlineLevel.BodyText automatically creates the outline (or bookmarks) 
+            // in PDF.
+
+            style = document.Styles["Heading1"];
+            style.Font.Name = "Tahoma";
+            style.Font.Size = 14;
+            style.Font.Bold = true;
+            style.Font.Color = Colors.DarkBlue;
+            style.ParagraphFormat.PageBreakBefore = true;
+            style.ParagraphFormat.SpaceAfter = 6;
+
+            style = document.Styles["Heading2"];
+            style.Font.Size = 12;
+            style.Font.Bold = true;
+            style.ParagraphFormat.PageBreakBefore = false;
+            style.ParagraphFormat.SpaceBefore = 6;
+            style.ParagraphFormat.SpaceAfter = 6;
+
+            style = document.Styles["Heading3"];
+            style.Font.Size = 10;
+            style.Font.Bold = true;
+            style.Font.Italic = true;
+            style.ParagraphFormat.SpaceBefore = 6;
+            style.ParagraphFormat.SpaceAfter = 3;
+
+            style = document.Styles[StyleNames.Header];
+            style.ParagraphFormat.AddTabStop("16cm", TabAlignment.Right);
+
+            style = document.Styles[StyleNames.Footer];
+            style.ParagraphFormat.AddTabStop("8cm", TabAlignment.Center);
+
+            // Create a new style called TextBox based on style Normal
+            style = document.Styles.AddStyle("TextBox", "Normal");
+            style.ParagraphFormat.Alignment = ParagraphAlignment.Justify;
+            style.ParagraphFormat.Borders.Width = 2.5;
+            style.ParagraphFormat.Borders.Distance = "3pt";
+            style.ParagraphFormat.Shading.Color = Colors.SkyBlue;
+
+            // Create a new style called TOC based on style Normal
+            style = document.Styles.AddStyle("TOC", "Normal");
+            style.ParagraphFormat.AddTabStop("16cm", TabAlignment.Right, TabLeader.Dots);
+            style.ParagraphFormat.Font.Color = Colors.Blue;
+        }
+
+        public void LoadSettings()
+        {
+            try
+            {
 
 
 

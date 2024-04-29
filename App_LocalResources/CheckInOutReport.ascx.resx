@@ -120,4 +120,7 @@
   <data name="btnGetLoginReport.Text" xml:space="preserve">
     <value>Get Report</value>
   </data>
+  <data name="lblLocation.Text" xml:space="preserve">
+    <value>Location</value>
+  </data>
 </root>
