@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="GIBS_TimeTracker" type="Module" version="00.00.12">
+    <package name="GIBS_TimeTracker" type="Module" version="00.00.13">
       <friendlyName>GIBS_TimeTracker</friendlyName>
       <description>GIBS TimeTracker Module</description>
       <iconFile>~/Images/icon_extensions_32px.png</iconFile>
@@ -43,7 +43,7 @@
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.12</version>
+              <version>00.00.13</version>
             </script>
           </scripts>
         </component>
@@ -195,7 +195,7 @@
               <name>PdfSharp.dll</name>
             </assembly>
             <assembly>
-              <name>BarcodeStandard.dll</name>
+              <name>Spire.Barcode.dll</name>
             </assembly>
             <assembly>
               <name>System.Drawing.Common.dll</name>

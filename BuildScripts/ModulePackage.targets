@@ -76,7 +76,7 @@
     <Copy SourceFiles="$(MSBuildDnnBinPath)\MigraDoc.RtfRendering.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
     <Copy SourceFiles="$(MSBuildDnnBinPath)\PdfSharp.Charting.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
     <Copy SourceFiles="$(MSBuildDnnBinPath)\PdfSharp.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
-    <Copy SourceFiles="$(MSBuildDnnBinPath)\BarcodeStandard.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
+    <Copy SourceFiles="$(MSBuildDnnBinPath)\Spire.Barcode.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
     <Copy SourceFiles="$(MSBuildDnnBinPath)\System.Drawing.Common.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
     
     
@@ -112,7 +112,7 @@
     <Copy SourceFiles="$(MSBuildDnnBinPath)\MigraDoc.RtfRendering.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
     <Copy SourceFiles="$(MSBuildDnnBinPath)\PdfSharp.Charting.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
     <Copy SourceFiles="$(MSBuildDnnBinPath)\PdfSharp.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
-    <Copy SourceFiles="$(MSBuildDnnBinPath)\BarcodeStandard.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
+    <Copy SourceFiles="$(MSBuildDnnBinPath)\Spire.Barcode.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
     <Copy SourceFiles="$(MSBuildDnnBinPath)\System.Drawing.Common.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
 
     <!-- create the SOURCE RESOURCES.ZIP file -->

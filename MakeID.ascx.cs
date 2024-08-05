@@ -16,6 +16,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using PdfSharp;
+using Spire.Barcode;
+
 //using BarcodeStandard;
 
 
@@ -143,13 +145,34 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
             try
             {
-                //start here
-                BarcodeLib.Barcode b = new BarcodeLib.Barcode();
-                System.Drawing.Image imgBarCode = b.Encode(BarcodeLib.TYPE.CODE128, barcodeText.ToString(), System.Drawing.Color.Black, System.Drawing.Color.White, 290, 30);
+                ////start here
+                //BarcodeLib.Barcode b = new BarcodeLib.Barcode();
+                //System.Drawing.Image imgBarCode = b.Encode(BarcodeLib.TYPE.CODE128, barcodeText.ToString(), System.Drawing.Color.Black, System.Drawing.Color.White, 290, 30);
 
-                FileStream fileStreamBarCode = new FileStream(PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + ttUserID.ToString() + "BarCode.jpg", FileMode.Create); //I use file stream instead of Memory stream here
-                imgBarCode.Save(fileStreamBarCode, ImageFormat.Jpeg);
-                fileStreamBarCode.Close();
+                //FileStream fileStreamBarCode = new FileStream(PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + ttUserID.ToString() + "BarCode.jpg", FileMode.Create); //I use file stream instead of Memory stream here
+                //imgBarCode.Save(fileStreamBarCode, ImageFormat.Jpeg);
+                //fileStreamBarCode.Close();
+
+          //      BarcodeGenerator gen = new BarcodeGenerator(EncodeTypes.Code128, barcodeText.ToString());
+          //      gen.Save(PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + ttUserID.ToString() + "BarCode.jpg", BarCodeImageFormat.Jpeg);
+
+                BarcodeSettings bs = new BarcodeSettings();
+
+                bs.Type = BarCodeType.Code128;
+                bs.Data = barcodeText.ToString();
+                bs.ShowText = false;
+                bs.AutoResize = false;
+                bs.Unit = GraphicsUnit.Millimeter;
+                bs.BarHeight = 9;
+                
+                bs.ImageWidth = 290;
+                bs.ImageHeight = 9;
+                
+                BarCodeGenerator bg = new BarCodeGenerator(bs);
+
+                bg.GenerateImage().Save(PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + ttUserID.ToString() + "BarCode.jpg");
+
+
                 _BarCodeImage = PortalSettings.HomeDirectoryMapPath + _IDCardImagePath.ToString() + ttUserID.ToString() + "BarCode.jpg";
             }
             catch (Exception ex)
@@ -685,7 +708,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void ButtonReturnToClientManager_Click(object sender, EventArgs e)
         {
 
-            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString() + "&UserId=" + ttUserID.ToString()));
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString() + "&ttUserId=" + ttUserID.ToString()));
 
         }
         static string MigraDocFilenameFromByteArray(byte[] image)
