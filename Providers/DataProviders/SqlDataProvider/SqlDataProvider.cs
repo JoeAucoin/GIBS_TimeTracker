@@ -141,9 +141,9 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
 
         #region Public Methods
 
-        public override void CheckInOut_Update(int timeTrackerID, int userID, DateTime startTime, DateTime endTime, string location)
+        public override void CheckInOut_Update(int timeTrackerID, int userID, DateTime startTime, DateTime endTime)
         {
-            SqlHelper.ExecuteNonQuery(ConnectionString, GetFullyQualifiedName("CheckInOut_Update"), timeTrackerID, userID, startTime, endTime, location);
+            SqlHelper.ExecuteNonQuery(ConnectionString, GetFullyQualifiedName("CheckInOut_Update"), timeTrackerID, userID, startTime, endTime);
         }
 
         public override IDataReader UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection)
@@ -167,14 +167,14 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
             SqlHelper.ExecuteNonQuery(ConnectionString, GetFullyQualifiedName("IDPhoto_Insert"), ttUserID, iDPhoto, createdByUserID);
         }
 
-        public override IDataReader CheckInOut(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location)
+        public override IDataReader CheckInOut(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location, string iPAddress)
         {
-            return (IDataReader)SqlHelper.ExecuteReader(ConnectionString, GetFullyQualifiedName("CheckInOut"), workDate, userID, ttUserID, startTime, endTime, location);
+            return (IDataReader)SqlHelper.ExecuteReader(ConnectionString, GetFullyQualifiedName("CheckInOut"), workDate, userID, ttUserID, startTime, endTime, location, iPAddress);
         }
 
-        public override IDataReader CheckInOutInsert(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location)
+        public override IDataReader CheckInOutInsert(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location, string iPAddress)
         {
-            return (IDataReader)SqlHelper.ExecuteReader(ConnectionString, GetFullyQualifiedName("CheckInOutInsert"), workDate, userID, ttUserID, startTime, endTime, location);
+            return (IDataReader)SqlHelper.ExecuteReader(ConnectionString, GetFullyQualifiedName("CheckInOutInsert"), workDate, userID, ttUserID, startTime, endTime, location, iPAddress);
         }
 
         public override IDataReader GetCheckInReport(DateTime startDate, DateTime endDate, string location)

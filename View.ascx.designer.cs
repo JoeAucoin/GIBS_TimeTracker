@@ -51,6 +51,15 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected global::System.Web.UI.WebControls.RangeValidator UserIDRangeValidator;
 
         /// <summary>
+        /// hiddenLocation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hiddenLocation;
+
+        /// <summary>
         /// BtnLogin control.
         /// </summary>
         /// <remarks>
@@ -94,5 +103,23 @@ namespace GIBS.Modules.GIBS_TimeTracker
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image ImgInitials;
+
+        /// <summary>
+        /// LabelIPAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelIPAddress;
+
+        /// <summary>
+        /// IPAddressHyperlink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink IPAddressHyperlink;
     }
 }

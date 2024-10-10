@@ -17,7 +17,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             //check we have some content to update
             if (info.EndTime != null)
             {
-                DataProvider.Instance().CheckInOut_Update(info.TimeTrackerID, info.UserID, info.StartTime, info.EndTime, info.Location);
+                DataProvider.Instance().CheckInOut_Update(info.TimeTrackerID, info.UserID, info.StartTime, info.EndTime);
             }
         }
 
@@ -67,7 +67,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             if (info.TTUserID > 0)
             {
               //  DataProvider.Instance().CheckInOut(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime);
-                return CBO.FillObject<TimeTrackerInfo>(DataProvider.Instance().CheckInOut(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime, info.Location));
+                return CBO.FillObject<TimeTrackerInfo>(DataProvider.Instance().CheckInOut(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime, info.Location, info.IPAddress));
             }
             else
                 return null;
@@ -80,7 +80,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             if (info.TTUserID > 0)
             {
                 //  DataProvider.Instance().CheckInOutInsert(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime);
-                return CBO.FillObject<TimeTrackerInfo>(DataProvider.Instance().CheckInOutInsert(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime, info.Location));
+                return CBO.FillObject<TimeTrackerInfo>(DataProvider.Instance().CheckInOutInsert(info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime, info.Location, info.IPAddress));
             }
             else
                 return null;

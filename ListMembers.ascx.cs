@@ -210,6 +210,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
             strQuerystring += "&SearchField=" + SearchField.ToString();
             strQuerystring += "&OrderBy=" + orderByField.ToString();
+            strQuerystring += "&ctl=ListMembers";
+            strQuerystring += "&mid=" + this.ModuleId.ToString();
 
             TimeTrackerController controller = new TimeTrackerController(); //ref TotalRecords,
             List<TimeTrackerInfo> Users11 = new List<TimeTrackerInfo>();

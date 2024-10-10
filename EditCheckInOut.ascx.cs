@@ -162,23 +162,50 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 TimeTrackerController controller = new TimeTrackerController();
                 TimeTrackerInfo item = new TimeTrackerInfo();
 
-                item.TimeTrackerID = Int32.Parse(HiddenFieldTimeTrackerID.Value.ToString());
+                
                 item.StartTime = DateTime.Parse(txtStartTime.Text.ToString());
                 item.EndTime = DateTime.Parse(txtWorkEndDate.Text.ToString());
                 item.UserID = this.UserId;
-                item.Location = Settings["location"].ToString();
+                string hiddenLocation = "";
+                if (Settings.Contains("location"))
+                {
+
+                    hiddenLocation = (Settings["location"].ToString());
+                }
+                else
+                {
+                    hiddenLocation = "-";
+                }
+
+                item.Location = hiddenLocation.ToString();
+                item.IPAddress = HttpContext.Current.Request.UserHostAddress.ToString();
+
 
                 if (Int32.Parse(HiddenFieldTimeTrackerID.Value.ToString()) > 0)
                 {
+                    item.TimeTrackerID = Int32.Parse(HiddenFieldTimeTrackerID.Value.ToString());
                     controller.CheckInOut_Update(item);
                     LabelMessage.Visible = true;
                     LabelMessage.Text = "Record Updated!";
                 }
                 else 
-                { 
-                  
+                {
+                    // info.WorkDate, info.UserID, info.TTUserID, info.StartTime, info.EndTime, info.Location, info.IPAddress)
+                   
+                    
                     item.TTUserID = Int32.Parse(HiddenFieldTTUserID.Value.ToString());
                     item.WorkDate = DateTime.Parse(txtStartTime.Text.ToString());
+
+                    //LabelMessage.Visible = true;
+                    //LabelMessage.Text = "WorkDate: " + item.WorkDate.ToShortDateString() + "<br>" +
+                    //     "UserID: " + item.UserID + "<br>" +
+                    //      "TTUserID: " + item.TTUserID + "<br>" +
+                    //       "StartTime: " + item.StartTime + "<br>" +
+                    //        "EndTime: !" + item.EndTime + "<br>" +
+                    //         "Location: " + item.Location + "<br>" +
+                    //          "IPAddress: " + item.IPAddress + "<br>";
+
+
                     controller.CheckInOutInsert(item);
                     LiteralCreatedOnDate.Text = DateTime.Now.Date.ToShortDateString();
                     LabelMessage.Visible = true;

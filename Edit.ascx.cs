@@ -572,7 +572,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                     UserInfo u = new UserInfo();
 
-                    u = UserController.GetUserById(UserPortal, Int32.Parse(Request.QueryString["UserId"]));
+                    u = UserController.GetUserById(UserPortal, Int32.Parse(Request.QueryString["ttUserId"]));
                     //     u.Membership.v
                     DotNetNuke.Entities.Users.UserController.ResetPasswordToken(u); 
 
@@ -709,10 +709,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     }
 
 
-
-
                     // THIS URL WILL GIVE YOU THE ADD NEW DONATION PANEL
-                    string newURL = Globals.NavigateURL(this.TabId, "", "UserId=" + oUser.UserID, "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
+                    string newURL = Globals.NavigateURL(this.TabId, "", "ttUserId=" + oUser.UserID, "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
 
                     // THIS URL WILL GIVE YOU A BLANK FORM TO ADD A NEW USER RECORD
                     //string newURL = Globals.NavigateURL(this.TabId, "", "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
@@ -724,8 +722,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
                 else
                 {
-                    DotNetNuke.Entities.Users.UserInfo DonationUser = DotNetNuke.Entities.Users.UserController.GetUserByName(oUser.Username);
-                    LoadRecord(DonationUser.UserID);
+                    DotNetNuke.Entities.Users.UserInfo TTUser = DotNetNuke.Entities.Users.UserController.GetUserByName(oUser.Username);
+                    LoadRecord(TTUser.UserID);
                     lblStatus.Text = "Error on Insert. Thay user already exists . . . I've loaded the record for you!";
                 }
 
@@ -747,7 +745,6 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
             try
             {
-                //  DonationTrackerSettings settingsData = new DonationTrackerSettings(this.TabModuleId);
                 // BUILD E-MAIL BODY
 
                 string EmailContent = content;
@@ -870,11 +867,6 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     }
 
                 }
-
-
-
-
-
 
             }
             catch (Exception ex)

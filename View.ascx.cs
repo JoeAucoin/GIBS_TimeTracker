@@ -22,6 +22,7 @@ using GIBS.Modules.GIBS_TimeTracker.Components;
 //using MigraDoc.DocumentObjectModel.Shapes.Charts;
 using System;
 using System.Text;
+using System.Web;
 using System.Web.UI.WebControls;
 //using Topaz;
 
@@ -50,7 +51,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
         static string _ReportsRole = "";
         static string _ManagerRole = "";
-        static string _Location;
+    
+    
 
         protected override void OnInit(EventArgs e)
         {
@@ -61,7 +63,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
             JavaScript.RequestRegistration(CommonJs.jQuery);
             JavaScript.RequestRegistration(CommonJs.jQueryUI);
             //    Page.ClientScript.RegisterClientScriptInclude("MyDateJS", "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/datejs/date.js");
-            Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "SigWeb", (this.TemplateSourceDirectory + "/JavaScript/SigWebTablet.js"));
+           // Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "SigWeb", (this.TemplateSourceDirectory + "/JavaScript/SigWebTablet.js"));
         
         }
 
@@ -70,8 +72,12 @@ namespace GIBS.Modules.GIBS_TimeTracker
             try
             {
                 txtUserId.Focus();
+
                 if (!IsPostBack)
                 {
+                   
+                    IPAddressHyperlink.NavigateUrl = "https://ip-address-lookup-v4.com/ip/" + HttpContext.Current.Request.UserHostAddress.ToString();
+                    LabelIPAddress.Text = "https://ip-address-lookup-v4.com/ip/" + HttpContext.Current.Request.UserHostAddress.ToString();
                     LoadSettings();
 
                     if (Request.QueryString["ttUserId"] != null)
@@ -93,11 +99,12 @@ namespace GIBS.Modules.GIBS_TimeTracker
             {
                 if (Settings.Contains("location"))
                 {
-                    _Location = (Settings["location"].ToString());
+                   
+                    hiddenLocation.Value = (Settings["location"].ToString()); 
                 }
                 else
                 {
-                    _Location = "";
+                    hiddenLocation.Value = "";
                 }
 
                 if (Settings.Contains("reportsRole"))
@@ -228,7 +235,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     item.StartTime = DateTime.Now;
                     item.EndTime = DateTime.Now;
                     item.UserID = this.UserId;
-                    item.Location = _Location.ToString();
+                    item.Location = hiddenLocation.Value.ToString();
+                    item.IPAddress = HttpContext.Current.Request.UserHostAddress.ToString();
 
                     //  controller.CheckInOut(item);
 

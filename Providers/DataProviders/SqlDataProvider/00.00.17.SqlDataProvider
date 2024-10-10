@@ -1,0 +1,67 @@
+﻿
+
+/****** Object:  StoredProcedure [dbo].[GIBS_TimeTracker_CheckInOutInsert]    Script Date: 10/10/2024 8:18:11 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_TimeTracker_CheckInOutInsert]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_TimeTracker_CheckInOutInsert]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_TimeTracker_CheckInOutInsert]    Script Date: 10/10/2024 8:18:11 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GIBS_TimeTracker_CheckInOutInsert]
+(
+    @WorkDate date,
+	@UserID int,
+	@TTUserID int,
+    @StartTime datetime,
+	@EndTime datetime,
+	@Location VARCHAR(25),
+	@IPAddress VARCHAR(15)
+)
+AS
+BEGIN
+
+	Declare @LastModifiedOnDate datetime
+	set @LastModifiedOnDate = GETDATE();
+	Declare @WorkEndDate date
+	Set @WorkEndDate = @EndTime
+
+
+
+	INSERT INTO [dbo].[GIBS_TimeTracker]
+           ([WorkDate]
+           ,[UserID]
+           ,[StartTime]  
+		   , [EndTime] 
+		   , WorkEndDate
+           ,[CreatedOnDate]
+           ,[CreatedByUserID]
+		   ,TotalTime
+		   ,[Location]
+		   ,IPAddress
+           )
+     VALUES
+           ( @WorkDate
+           ,@TTUserID
+           ,@StartTime    
+		   , @EndTime
+		   ,@WorkEndDate
+           ,GETDATE()
+           ,@UserID   
+		   ,DATEDIFF(MINUTE, @StartTime, @EndTime)/60.0
+		   ,@Location
+		   ,@IPAddress
+		 )
+
+
+Select 1 as CheckInOut
+
+
+END
+GO
+
+

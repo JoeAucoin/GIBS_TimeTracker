@@ -10,10 +10,7 @@ using System.Web.UI;
 using System.Drawing;
 using System.Web.UI.WebControls;
 using GIBS.Modules.GIBS_TimeTracker.Components;
-using DotNetNuke.UI.UserControls;
-using MigraDoc.DocumentObjectModel.Tables;
-using DotNetNuke.Services.Localization;
-using DotNetNuke.UI.WebControls;
+
 
 namespace GIBS.Modules.GIBS_TimeTracker
 {
@@ -29,7 +26,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         {
             if (!IsPostBack)
             {
-                txtStartDate.Text = DateTime.Now.AddDays(-7).ToShortDateString();
+                txtStartDate.Text = DateTime.Now.AddDays(-1).ToShortDateString();
                 txtEndDate.Text = DateTime.Now.ToShortDateString();
                 if (Settings.Contains("location"))
                 {
@@ -92,10 +89,10 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
                     
 
-                if (e.Row.Cells[6].Text.Contains("12:00 AM"))
+                if (e.Row.Cells[7].Text.Contains("12:00 AM"))
                 {
-                    e.Row.Cells[6].Text = "Not Checked Out";
-                    e.Row.Cells[6].BackColor = System.Drawing.Color.LightPink;
+                    e.Row.Cells[7].Text = "Not Checked Out";
+                    e.Row.Cells[7].BackColor = System.Drawing.Color.LightPink;
                     
                 }
             }

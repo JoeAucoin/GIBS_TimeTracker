@@ -80,7 +80,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
 
         //public abstract IDataReader GetItem(int itemId);        
 
-        public abstract void CheckInOut_Update(int timeTrackerID, int userID, DateTime startTime, DateTime endTime, string location);
+        public abstract void CheckInOut_Update(int timeTrackerID, int userID, DateTime startTime, DateTime endTime);
 
         public abstract IDataReader UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection);
 
@@ -97,9 +97,9 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
 
         public abstract void IDPhoto_Insert(int ttUserID, byte[] iDPhoto, int createdByUserID);
 
-        public abstract IDataReader CheckInOut(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location);
+        public abstract IDataReader CheckInOut(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location, string iPAddress);
 
-        public abstract IDataReader CheckInOutInsert(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location);
+        public abstract IDataReader CheckInOutInsert(DateTime workDate, int userID, int ttUserID, DateTime startTime, DateTime endTime, string location, string iPAddress);
         #endregion
 
     }

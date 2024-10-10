@@ -37,6 +37,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
         private bool isActive;
 
         private string location;
+        private string iPAddress;
 
         private bool doNotMail;
 
@@ -245,6 +246,12 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
         {
             get { return location; }
             set { location = value; }
+        }
+
+        public string IPAddress
+        {
+            get { return iPAddress; }
+            set { iPAddress = value; }
         }
 
         //doNotMail

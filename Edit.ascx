@@ -9,9 +9,6 @@
 
 <script type="text/javascript">
 
-
-
-
     jQuery(function ($) {
         $("#<%= txtTelephone.ClientID %>").mask("(999) 999-9999? x99999");
         $("#<%= txtWorkPhone.ClientID %>").mask("(999) 999-9999? x99999");
