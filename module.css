@@ -19,9 +19,7 @@
 
 .pull-right {
     z-index: 9999;
-    position: absolute;
-    right: 0;
-    top: 0;
+    float: right;
 }
 
 

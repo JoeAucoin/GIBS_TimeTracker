@@ -29,6 +29,7 @@ using System.Web;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Web.UI;
+using DotNetNuke.UI.UserControls;
 
 namespace GIBS.Modules.GIBS_TimeTracker
 {
@@ -129,11 +130,15 @@ namespace GIBS.Modules.GIBS_TimeTracker
                         GroupIt();
                         Fill_Report();
 
-                        cmdSendCredentials.Visible = true;
+                        
                     }
                     else
                     {
-                        this.ModuleConfiguration.ModuleControl.ControlTitle = "Add New Record";
+                       // this.ModuleConfiguration.ModuleControl.ControlTitle = "Add New Record";
+                        LabelName.Text = "Add New Record";
+                        HyperLinkMakeIDCard.Visible = false;
+                        HyperLinkPhotoID.Visible = false;
+                        HyperLinkAddCheckInOut.Visible = false;
                         
                     }
 
@@ -357,10 +362,10 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
 
 
-                if (e.Row.Cells[6].Text.Contains("12:00 AM"))
+                if (e.Row.Cells[7].Text.Contains("12:00 AM"))
                 {
-                    e.Row.Cells[6].Text = "Not Checked Out!<br / >Report to Manager";
-                    e.Row.Cells[6].BackColor = System.Drawing.Color.LightPink;
+                    e.Row.Cells[7].Text = "Not Checked Out!";
+                    e.Row.Cells[7].BackColor = System.Drawing.Color.LightPink;
 
                 }
             }
@@ -571,21 +576,17 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 {
 
                     UserInfo u = new UserInfo();
-
                     u = UserController.GetUserById(UserPortal, Int32.Parse(Request.QueryString["ttUserId"]));
-                    //     u.Membership.v
+                    
                     DotNetNuke.Entities.Users.UserController.ResetPasswordToken(u); 
-
-                  //  u.Membership.Password = UserController.GetPassword(ref u, "");
-                    //   System.Web.Security.Membership.ValidateUser(u.Username, u.Profile.p);
                     DotNetNuke.Services.Mail.Mail.SendMail(u, DotNetNuke.Services.Mail.MessageType.PasswordReminder, PortalSettings);
-                    cmdSendCredentials.Visible = false;
+                   
                     lblSendCredentials.Text = "Password reset link successfully sent!";
-
+                    cmdSendCredentials.Visible = false;
                 }
                 else
                 {
-                    lblSendCredentials.Text = "A valid e-mail address is required to send a password!";
+                    lblSendCredentials.Text = "E-mail address is required to send a password!";
                 }
 
 
@@ -709,13 +710,13 @@ namespace GIBS.Modules.GIBS_TimeTracker
                     }
 
 
-                    // THIS URL WILL GIVE YOU THE ADD NEW DONATION PANEL
+                    // THIS URL WILL GIVE YOU THE RECORD
                     string newURL = Globals.NavigateURL(this.TabId, "", "ttUserId=" + oUser.UserID, "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
 
                     // THIS URL WILL GIVE YOU A BLANK FORM TO ADD A NEW USER RECORD
                     //string newURL = Globals.NavigateURL(this.TabId, "", "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
 
-                    cmdSendCredentials.Visible = true;
+                   
 
                     Response.Redirect(newURL, false);
 
@@ -904,6 +905,17 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
         protected void ButtonReturnToList_Click(object sender, EventArgs e)
         {
+            Response.Redirect(EditUrl("ListMembers"));
+        }
+
+        protected void cmdDeleteUser_Click(object sender, EventArgs e)
+        {
+           
+            UserInfo objUserInfo = DotNetNuke.Entities.Users.UserController.GetUserById(this.PortalId, Int32.Parse(hidUserId.Value.ToString().Trim()));
+            UserController.DeleteUser(ref objUserInfo, false, false);
+            // Currently doing a Soft Delete,
+            // uncomment next line to do a Hard Delete
+      //      UserController.RemoveUser(objUserInfo);
             Response.Redirect(EditUrl("ListMembers"));
         }
     }

@@ -21,9 +21,9 @@ namespace GIBS.Modules.GIBS_TimeTracker.Components
             }
         }
 
-        public List<TimeTrackerInfo> UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection)
+        public List<TimeTrackerInfo> UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection, string roleName)
         {
-            return CBO.FillCollection<TimeTrackerInfo>(DataProvider.Instance().UserFullListSearch(PortalID, PageIndex, PageSize, searchField, searchCriteria, orderByField, OrderByDirection));
+            return CBO.FillCollection<TimeTrackerInfo>(DataProvider.Instance().UserFullListSearch(PortalID, PageIndex, PageSize, searchField, searchCriteria, orderByField, OrderByDirection, roleName));
         }
         //GetCheckInReport
 

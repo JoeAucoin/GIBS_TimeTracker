@@ -15,6 +15,9 @@
 { font-size:1.3em; }
 </style>
 
+<div class="px-50">&nbsp;</div>
+
+
 <div class="dnnForm" id="form-search">
     <div style="float: right;">
        
@@ -83,14 +86,14 @@
             </ItemTemplate>
         </asp:TemplateField>
 
-        <asp:TemplateField HeaderText="Make ID Card" ItemStyle-Width="66px">
+        <asp:TemplateField HeaderText="Make ID Card" ItemStyle-Width="76px">
             <ItemTemplate>
             <asp:HyperLink ID="HyperLinkMakeIDCard" runat="server" 
                 NavigateUrl=""  Target="_blank" ><asp:Image ID="Image2" AlternateText="Make ID Card" ImageUrl="~/Icons/Sigma/Rt_32x32_Standard.png" ToolTip="Make ID Card" runat="server" /></asp:HyperLink>
             </ItemTemplate>
         </asp:TemplateField>
 
-        <asp:TemplateField HeaderText="Check In-Out" ItemStyle-Width="66px">
+        <asp:TemplateField HeaderText="Check In-Out" ItemStyle-Width="70px">
             <ItemTemplate>
             <asp:HyperLink ID="HyperLinkCheckInOut" runat="server" 
                 NavigateUrl="" ><asp:Image ID="Image3" ImageUrl="~/Icons/Sigma/Refresh_32x32_Standard.png" AlternateText="Check in-Out" ToolTip="Check in-Out" runat="server" /></asp:HyperLink>

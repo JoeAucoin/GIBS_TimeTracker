@@ -280,6 +280,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Providers\DataProviders\SqlDataProvider\00.00.17.SqlDataProvider" />
+    <Content Include="Providers\DataProviders\SqlDataProvider\00.00.18.SqlDataProvider" />
     <None Include="web.config.old" />
     <Content Include="Providers\DataProviders\SqlDataProvider\00.00.08.SqlDataProvider" />
     <Content Include="Providers\DataProviders\SqlDataProvider\00.00.12.SqlDataProvider" />

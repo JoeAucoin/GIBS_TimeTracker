@@ -51,8 +51,7 @@
         document.getElementById(id).select();
     }
 </script>
-
-<asp:Label ID="lblDebug" runat="server" Visible="false" />
+<p><asp:Label ID="lblDebug" runat="server" Visible="false" /></p>
 <asp:HiddenField ID="hidUserId" runat="server" />
 <div class="pull-right">
     <asp:HyperLink ID="HyperLinkMakeIDCard" runat="server" 
@@ -84,9 +83,14 @@
                 OnClientClick="UseData();" runat="server" OnClick="cmdUpdate_Click"
                 CssClass="dnnPrimaryAction"></asp:LinkButton><br />
 
-                <br />
+
+ <asp:LinkButton ID="cmdDeleteUser" resourcekey="cmdDeleteUser" CausesValidation="false"
+      runat="server" OnClick="cmdDeleteUser_Click"
+     CssClass="dnnSecondaryAction"></asp:LinkButton><br />
+
+               
             <asp:LinkButton ID="cmdSendCredentials" Text="Send Password Reset" runat="server" CssClass="dnnSecondaryAction" Visible="false" 
-                OnClick="cmdSendCredentials_Click"></asp:LinkButton>
+                OnClick="cmdSendCredentials_Click"></asp:LinkButton><br />
             <asp:Label ID="lblSendCredentials" runat="server" Text="" CssClass="NormalBold NormalRed" />
         </div>
         <div class="dnnForm" id="form-edit-user">
@@ -97,14 +101,14 @@
                     <dnn:Label ID="lblFirstName" runat="server" ControlName="txtFirstName" Suffix=":" />
                     <asp:TextBox ID="txtFirstName" runat="server" ValidationGroup="UserForm" CssClass="dnnFormRequired"
                         Width="19%" /><asp:RequiredFieldValidator runat="server" ID="reqFirstName" CssClass="dnnFormMessage dnnFormError"
-                        resourcekey="reqFirstName" ControlToValidate="txtFirstName" ErrorMessage="First Name Required!" Display="Dynamic"
+                        resourcekey="reqFirstName" ControlToValidate="txtFirstName" Display="Dynamic"
                         ValidationGroup="UserForm" />
                     <asp:TextBox ID="txtMiddleName" runat="server" Width="4%" />
                     <asp:TextBox ID="txtLastName" runat="server" ValidationGroup="UserForm" CssClass="dnnFormRequired"
                         Width="19%" />
                     
                     <asp:RequiredFieldValidator runat="server" ID="reqLastName" resourcekey="reqLastName"
-                        CssClass="dnnFormMessage dnnFormError" ControlToValidate="txtLastName" ErrorMessage="Last Name Required!" Display="Dynamic"
+                        CssClass="dnnFormMessage dnnFormError" ControlToValidate="txtLastName" Display="Dynamic"
                         ValidationGroup="UserForm" />
                 </div>
 
@@ -113,6 +117,10 @@
                 <div class="dnnFormItem">
                     <dnn:Label ID="lblEmail" runat="server" ControlName="txtEmail" Suffix=":"></dnn:Label>
                     <asp:TextBox ID="txtEmail" runat="server"></asp:TextBox>
+<asp:RequiredFieldValidator runat="server" ID="reqEmail" resourcekey="reqEmail"
+                        CssClass="dnnFormMessage dnnFormError" ControlToValidate="txtEmail" Display="Dynamic"
+                        ValidationGroup="UserForm" />
+<asp:RegularExpressionValidator ID="regexEmailValid" runat="server" resourcekey="regexEmailValid" ValidationExpression="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" ControlToValidate="txtEmail" CssClass="dnnFormMessage dnnFormError"></asp:RegularExpressionValidator>
                 </div>
                 <div class="dnnFormItem">
                     <dnn:Label ID="lblStreet" runat="server" ControlName="txtStreet" Suffix=":"></dnn:Label>
@@ -200,8 +208,8 @@
       
         <asp:BoundField HeaderText="Name" DataField="DisplayName" SortExpression="DisplayName" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
                 <asp:BoundField HeaderText="Location" DataField="Location" Visible="true" SortExpression="Location" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Left"></asp:BoundField>
-		<asp:BoundField HeaderText="StartTime" DataField="StartTime" SortExpression="StartTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
-        <asp:BoundField HeaderText="EndTime" DataField="EndTime" SortExpression="EndTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+		<asp:BoundField HeaderText="Start Time" DataField="StartTime" SortExpression="StartTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+        <asp:BoundField HeaderText="End Time" DataField="EndTime" SortExpression="EndTime" DataFormatString="{0:hh:mm tt}" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
 		<asp:BoundField HeaderText="Hours" DataField="TotalTime" SortExpression="TotalTime" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
         <asp:BoundField HeaderText="Email" DataField="Email" Visible="false" SortExpression="Email" ItemStyle-VerticalAlign="Middle" ItemStyle-HorizontalAlign="Left"></asp:BoundField>
         

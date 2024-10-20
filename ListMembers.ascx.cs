@@ -15,6 +15,7 @@ using System.Web.UI.WebControls;
 using System.Collections;
 using System.Data;
 using DotNetNuke.UI.WebControls;
+using GIBS.Modules.GIBS_TimeTracker;
 using GIBS.Modules.GIBS_TimeTracker.Components;
 using DotNetNuke.Common.Lists;
 using System.Security.Policy;
@@ -30,7 +31,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected int TotalPages = -1;
         protected int TotalRecords = 0;
         static int PageSize;
-        static string RoleName;
+        static string _RoleName;
         public string _ReportsRole;
         protected bool SuppressPager = false;
         //       protected string RoleName = "Registered Users";
@@ -217,7 +218,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
             List<TimeTrackerInfo> Users11 = new List<TimeTrackerInfo>();
 
             //Joe this
-            Users11 = controller.UserFullListSearch(this.PortalId, CurrentPage, PageSize, SearchField, SearchText, orderByField, orderByDirection);
+            Users11 = controller.UserFullListSearch(this.PortalId, CurrentPage, PageSize, SearchField, SearchText, orderByField, orderByDirection, _RoleName.ToString());
 
 
             DataTable dt = new DataTable();
@@ -232,7 +233,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
             //        PageSize = (from DataRow dr in dt.Rows
             //                   select (int)dr["RecordsperPage"]).FirstOrDefault();
 
-            lblDebug.Text = "Criteria: " + SearchText.ToString()
+            lblDebug.Text += "Criteria: " + SearchText.ToString()
                 + "  <br />Searching: " + ddlSearchType.SelectedItem.ToString()
                 + "  <br />Order By: " + ddlOrderBy.SelectedItem.ToString()
                 + "<br />Total Records: " + TotalRecords.ToString();
@@ -329,8 +330,15 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
                 if (Settings.Contains("roleName"))
                 {
-                    RoleName = Settings["roleName"].ToString();
+                    _RoleName = (Settings["roleName"].ToString());
+                    //lblDebug.Visible = true;
+                    //lblDebug.Text = "RoleName: " + _RoleName.ToString() + "<br />";
                 }
+                //else
+                //{
+                //    lblDebug.Visible = true;
+                //    lblDebug.Text = "NO RoleName: " + "<br />";
+                //}
 
                 if (Settings.Contains("reportsRole"))
                 {

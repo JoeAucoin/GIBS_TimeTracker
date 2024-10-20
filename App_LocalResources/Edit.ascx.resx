@@ -126,11 +126,11 @@
   <data name="cmdCancel.Text" xml:space="preserve">
     <value>Return to FrontDesk</value>
   </data>
-  <data name="cmdUpdateDonorRecord.Text" xml:space="preserve">
-    <value>Update Record</value>
+  <data name="cmdDeleteUser.Text" xml:space="preserve">
+    <value>Delete User</value>
   </data>
   <data name="cmdUpdateRecord.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Save Record</value>
   </data>
   <data name="ControlTitle_edit.Text" xml:space="preserve">
     <value>Volunteer Information</value>
@@ -159,13 +159,16 @@
   <data name="lblWorkPhone.Text" xml:space="preserve">
     <value>Work Phone</value>
   </data>
+  <data name="regexEmailValid.Text" xml:space="preserve">
+    <value>&lt;font color="white"&gt;E-mail address is not valid!&lt;/font&gt;</value>
+  </data>
   <data name="reqEmail.Text" xml:space="preserve">
-    <value>E-mail address is required!</value>
+    <value>&lt;font color="white"&gt;E-mail address is required!&lt;/font&gt;</value>
   </data>
   <data name="reqFirstName.Text" xml:space="preserve">
-    <value>&lt;font color="white"&gt;First name is required!&lt;/font&gt;</value>
+    <value>&lt;font color="white"&gt;First and last name is required!&lt;/font&gt;</value>
   </data>
   <data name="reqLastName.Text" xml:space="preserve">
-    <value>&lt;font color="white"&gt;Last name is required!&lt;/font&gt;</value>
+    <value>&lt;font color="white"&gt;First and last name is required!&lt;/font&gt;</value>
   </data>
 </root>

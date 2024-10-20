@@ -77,7 +77,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 {
                    
                     IPAddressHyperlink.NavigateUrl = "https://ip-address-lookup-v4.com/ip/" + HttpContext.Current.Request.UserHostAddress.ToString();
-                    LabelIPAddress.Text = "https://ip-address-lookup-v4.com/ip/" + HttpContext.Current.Request.UserHostAddress.ToString();
+                    LabelIPAddress.Text = "Current Location: " + HttpContext.Current.Request.UserHostAddress.ToString();
                     LoadSettings();
 
                     if (Request.QueryString["ttUserId"] != null)

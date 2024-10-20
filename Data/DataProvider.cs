@@ -82,7 +82,7 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
 
         public abstract void CheckInOut_Update(int timeTrackerID, int userID, DateTime startTime, DateTime endTime);
 
-        public abstract IDataReader UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection);
+        public abstract IDataReader UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection, string roleName);
 
         public abstract IDataReader GetPhotoByUserID(int ttUserID);
 

@@ -21,7 +21,7 @@
 
 <style>
     
- .hover-zoom {
+/* .hover-zoom {
     -moz-transition:all 0.3s;
     -webkit-transition:all 0.3s;
      transition:all 0.3s
@@ -30,10 +30,16 @@
     -moz-transform: scale(1.1);
     -webkit-transform: scale(1.1);
      transform: scale(4.6)
- }
+ }*/
 
 </style>
       
+
+<div class="pull-right">
+
+    <asp:hyperlink ID="IPAddressHyperlink" runat="server" Target="_blank">
+<asp:Label ID="LabelIPAddress" runat="server" CssClass="IPAddress" Text="" Visible="True" /></asp:hyperlink>  </div>
+
 <div>
 <asp:Label ID="LabelDebug" runat="server" Text="LabelDebug" Visible="false" />
 </div>
@@ -65,8 +71,3 @@
 
 </div>
 
-
-<div>
-<asp:Label ID="LabelIPAddress" runat="server" CssClass="IPAddress" Text="" Visible="False"></asp:Label>
-
-    <asp:hyperlink ID="IPAddressHyperlink" runat="server" Target="_blank">%</asp:hyperlink>  </div>

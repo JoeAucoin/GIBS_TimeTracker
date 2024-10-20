@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="GIBS_TimeTracker" type="Module" version="00.00.17">
+    <package name="GIBS_TimeTracker" type="Module" version="00.00.18">
       <friendlyName>GIBS_TimeTracker</friendlyName>
       <description>GIBS TimeTracker Module</description>
       <iconFile>~/DesktopModules/GIBS_TimeTracker/images/TimeTracker.png</iconFile>
@@ -50,10 +50,15 @@
               <name>00.00.17.SqlDataProvider</name>
               <version>00.00.17</version>
             </script>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>00.00.18.SqlDataProvider</name>
+              <version>00.00.18</version>
+            </script>
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.17</version>
+              <version>00.00.18</version>
             </script>
           </scripts>
         </component>

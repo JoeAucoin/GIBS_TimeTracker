@@ -146,9 +146,9 @@ namespace GIBS.Modules.GIBS_TimeTracker.Data
             SqlHelper.ExecuteNonQuery(ConnectionString, GetFullyQualifiedName("CheckInOut_Update"), timeTrackerID, userID, startTime, endTime);
         }
 
-        public override IDataReader UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection)
+        public override IDataReader UserFullListSearch(int PortalID, int PageIndex, int PageSize, string searchField, string searchCriteria, string orderByField, string OrderByDirection, string roleName)
         {
-            return (IDataReader)SqlHelper.ExecuteReader(ConnectionString, GetFullyQualifiedName("UserFullListSearch"), PortalID, PageIndex, PageSize, searchField, searchCriteria, orderByField, OrderByDirection);
+            return (IDataReader)SqlHelper.ExecuteReader(ConnectionString, GetFullyQualifiedName("UserFullListSearch"), PortalID, PageIndex, PageSize, searchField, searchCriteria, orderByField, OrderByDirection, roleName);
         }
 
         public override IDataReader GetPhotoByUserID(int ttUserID)
