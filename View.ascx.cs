@@ -58,13 +58,10 @@ namespace GIBS.Modules.GIBS_TimeTracker
         {
             base.OnInit(e);
 
-         
-
+        
             JavaScript.RequestRegistration(CommonJs.jQuery);
             JavaScript.RequestRegistration(CommonJs.jQueryUI);
-            //    Page.ClientScript.RegisterClientScriptInclude("MyDateJS", "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/datejs/date.js");
-           // Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "SigWeb", (this.TemplateSourceDirectory + "/JavaScript/SigWebTablet.js"));
-        
+         
         }
 
         protected void Page_Load(object sender, EventArgs e)

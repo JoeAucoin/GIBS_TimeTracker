@@ -310,7 +310,7 @@
           </DevelopmentServerVPath>
           <IISUrl>http://dnn913.com/desktopmodules/GIBS_TimeTracker</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://dnn913.com</IISAppRootUrl>
+          <IISAppRootUrl>http://dnndev.me</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

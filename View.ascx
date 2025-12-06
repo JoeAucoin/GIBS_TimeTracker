@@ -6,7 +6,7 @@
       $(function () {
           var $id = $('#txtUserId');
           $id.keyup(function (e) {
-              if ($id.val().length >= 11) {
+              if ($id.val().length >= 4) {
                   $(this.form).submit();
               }
           });
