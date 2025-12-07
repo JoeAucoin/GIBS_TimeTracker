@@ -1,7 +1,9 @@
 ﻿
 using System;
 using System.IO;
+using DotNetNuke.Abstractions;
 using DotNetNuke.Entities.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using DotNetNuke.Framework.JavaScriptLibraries;
 using DotNetNuke.Services.Exceptions;
 using GIBS.Modules.GIBS_TimeTracker.Components;
@@ -35,11 +37,12 @@ namespace GIBS.Modules.GIBS_TimeTracker
         string _IDCardImagePath = "";
         string _CertWatermark = "";
 
+        private INavigationManager _navigationManager;
 
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
-
+            _navigationManager = DependencyProvider.GetRequiredService<INavigationManager>();
             JavaScript.RequestRegistration(CommonJs.jQuery);
             //     JavaScript.RequestRegistration(CommonJs.jQueryUI);
             //    JavaScript.RequestRegistration(CommonJs.DnnPlugins);
@@ -128,7 +131,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
                 else
                 {
-                    Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(), true);
+                    Response.Redirect(_navigationManager.NavigateURL(), true);
                 }
 
             }
@@ -708,7 +711,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void ButtonReturnToClientManager_Click(object sender, EventArgs e)
         {
 
-            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString() + "&ttUserId=" + ttUserID.ToString()));
+            Response.Redirect(_navigationManager.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString() + "&ttUserId=" + ttUserID.ToString()));
 
         }
         static string MigraDocFilenameFromByteArray(byte[] image)

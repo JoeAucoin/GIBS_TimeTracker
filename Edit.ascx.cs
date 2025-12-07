@@ -1,20 +1,10 @@
-﻿/*
-' Copyright (c) 2023  GIBS.com
-'  All rights reserved.
-' 
-' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-' TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-' THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-' CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-' DEALINGS IN THE SOFTWARE.
-' 
-*/
-
-
+﻿
 using System;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
+using DotNetNuke.Abstractions;
 using DotNetNuke.Entities.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using DotNetNuke.Entities.Users;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
@@ -47,6 +37,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
     /// -----------------------------------------------------------------------------
     public partial class Edit :  GIBS_TimeTrackerModuleBase
     {
+        private INavigationManager _navigationManager;
 
         private GridViewHelper helper;
         // To show custom operations...
@@ -61,7 +52,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
-
+            _navigationManager = DependencyProvider.GetRequiredService<INavigationManager>();
             JavaScript.RequestRegistration(CommonJs.jQuery);
             JavaScript.RequestRegistration(CommonJs.jQueryUI);
             Page.ClientScript.RegisterClientScriptInclude("MyDateJS", "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/datejs/date.js");
@@ -180,11 +171,11 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 //      this.ModuleConfiguration.ModuleControl.ControlTitle = DonationUser.Profile.GetPropertyValue("Company") + " - " + DonationUser.DisplayName;
 
 
-                string formatString1 = Globals.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
+                string formatString1 = _navigationManager.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
                 formatString1 = formatString1.Replace("IDFIELD", RecordID.ToString());
                 HyperLinkMakeIDCard.NavigateUrl = formatString1.ToString();
 
-                string formatString2 = Globals.NavigateURL(TabId, "EditCheckInOut", "mid", this.ModuleId.ToString(), "ttUserId=IDFIELD");
+                string formatString2 = _navigationManager.NavigateURL(TabId, "EditCheckInOut", "mid", this.ModuleId.ToString(), "ttUserId=IDFIELD");
                 formatString2 = formatString2.Replace("IDFIELD", RecordID.ToString());
                 HyperLinkAddCheckInOut.NavigateUrl = formatString2.ToString();
 
@@ -345,7 +336,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
         {
             int itemID = (int)gv_Report.DataKeys[e.NewEditIndex].Value;
-            Response.Redirect(Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString() + "&ItemId=" + itemID));
+            Response.Redirect(_navigationManager.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString() + "&ItemId=" + itemID));
 
 
         }
@@ -357,7 +348,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 var hyperLink = e.Row.FindControl("HyperLink1") as HyperLink;
                 if (hyperLink != null)
                 {
-                    string newURL = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString(), "ttid=" + DataBinder.Eval(e.Row.DataItem, "TimeTrackerID"));
+                    string newURL = _navigationManager.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString(), "ttid=" + DataBinder.Eval(e.Row.DataItem, "TimeTrackerID"));
                     hyperLink.NavigateUrl = newURL.ToString();
                 }
 
@@ -665,7 +656,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 oNewMembership.CreatedDate = System.DateTime.Now;
 
                 //       oNewMembership.Email = oUser.Email;
-                oNewMembership.IsOnLine = false;
+                //oNewMembership.IsOnLine = false;
                 //       oNewMembership.Username = oUser.Username;
                 oNewMembership.Password = vPassword.ToString();
 
@@ -711,12 +702,9 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
 
                     // THIS URL WILL GIVE YOU THE RECORD
-                    string newURL = Globals.NavigateURL(this.TabId, "", "ttUserId=" + oUser.UserID, "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
+                    string newURL = _navigationManager.NavigateURL(this.TabId, "", "ttUserId=" + oUser.UserID, "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
 
-                    // THIS URL WILL GIVE YOU A BLANK FORM TO ADD A NEW USER RECORD
-                    //string newURL = Globals.NavigateURL(this.TabId, "", "ctl=Edit", "mid=" + this.ModuleId, "Status=Success");
-
-                   
+                  
 
                     Response.Redirect(newURL, false);
 
@@ -816,7 +804,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         {
             try
             {
-                Response.Redirect(Globals.NavigateURL(), true);
+                Response.Redirect(_navigationManager.NavigateURL(), true);
             }
             catch (Exception ex)
             {
@@ -882,7 +870,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
             try
             {
 
-                string myLink = DotNetNuke.Common.Globals.NavigateURL("Camera", "mid=" + this.ModuleId);
+                string myLink = _navigationManager.NavigateURL("Camera", "mid=" + this.ModuleId);
                 //myLink += "?cid=" + clientId.ToString() + "&SkinSrc=[G]" + DotNetNuke.Common.Globals.QueryStringEncode(DotNetNuke.UI.Skins.SkinController.RootSkin + "/" + DotNetNuke.Common.Globals.glbHostSkinFolder + "/" + "popUpSkin");
                 myLink += "?cid=" + hidUserId.Value.ToString();
 

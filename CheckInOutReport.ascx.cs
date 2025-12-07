@@ -1,26 +1,30 @@
-﻿using System;
-using DotNetNuke.Common;
-using DotNetNuke.Common.Utilities;
+﻿using DotNetNuke.Abstractions;
 using DotNetNuke.Entities.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using DotNetNuke.Services.Exceptions;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Drawing;
-using System.Web.UI.WebControls;
 using GIBS.Modules.GIBS_TimeTracker.Components;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 
 namespace GIBS.Modules.GIBS_TimeTracker
 {
     public partial class CheckInOutReport : PortalModuleBase
     {
-
-      //  static int _eventMID = 0;
+        private INavigationManager _navigationManager;
+        //  static int _eventMID = 0;
         private GridViewHelper helper;
         // To show custom operations...
         private List<int> mQuantities = new List<int>();
+
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            _navigationManager = DependencyProvider.GetRequiredService<INavigationManager>();
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -32,7 +36,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 {
                     ddlLocations.SelectedValue = Settings["location"].ToString();
                 }
-                
+
             }
         }
 
@@ -48,7 +52,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
             try
             {
-                
+
                 List<TimeTrackerInfo> items;
                 TimeTrackerController controller = new TimeTrackerController();
 
@@ -72,33 +76,52 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
         {
             int itemID = (int)gv_Report.DataKeys[e.NewEditIndex].Value;
-            Response.Redirect(Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString() + "&ItemId=" + itemID));
+            // Response.Redirect(Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString() + "&ItemId=" + itemID));
+            var url = _navigationManager.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", $"mid={ModuleId}", $"ItemId={itemID}");
+            Response.Redirect(url);
 
-           
         }
 
         protected void gv_Report_DataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                var hyperLink = e.Row.FindControl("HyperLink1") as HyperLink;
-                if (hyperLink != null)
+                if (_navigationManager == null)
                 {
-                    string newURL = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "EditCheckInOut", "mid=" + ModuleId.ToString(), "ttid=" + DataBinder.Eval(e.Row.DataItem, "TimeTrackerID"));
-                    hyperLink.NavigateUrl = newURL.ToString();
+                    Exceptions.ProcessModuleLoadException(this, new Exception("_navigationManager is null."));
+                    return;
                 }
-                    
 
-                if (e.Row.Cells[7].Text.Contains("12:00 AM"))
+                var hyperLink = e.Row.FindControl("HyperLink1") as HyperLink;
+                if (hyperLink != null && e.Row.DataItem != null)
+                {
+                    var timeTrackerIdObj = DataBinder.Eval(e.Row.DataItem, "TimeTrackerID");
+                    string timeTrackerId = timeTrackerIdObj != null ? timeTrackerIdObj.ToString() : string.Empty;
+                    string newURL = _navigationManager.NavigateURL(
+                        PortalSettings.ActiveTab.TabID,
+                        "EditCheckInOut",
+                        $"mid={ModuleId}",
+                        $"ttid={timeTrackerId}"
+                    );
+                    hyperLink.NavigateUrl = newURL;
+                }
+                else if (hyperLink == null)
+                {
+                    Exceptions.ProcessModuleLoadException(this, new Exception("HyperLink1 not found in row."));
+                }
+                else if (e.Row.DataItem == null)
+                {
+                    Exceptions.ProcessModuleLoadException(this, new Exception("DataItem is null in row."));
+                }
+
+                if (e.Row.Cells.Count > 7 && e.Row.Cells[7].Text != null && e.Row.Cells[7].Text.Contains("12:00 AM"))
                 {
                     e.Row.Cells[7].Text = "Not Checked Out";
                     e.Row.Cells[7].BackColor = System.Drawing.Color.LightPink;
-                    
                 }
             }
         }
 
- 
 
         protected void gv_Report_Sorting(object sender, GridViewSortEventArgs e)
         {
@@ -114,8 +137,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 helper = new GridViewHelper(this.gv_Report);
                 helper.RegisterGroup("WorkDate", true, true);
 
-                   helper.RegisterSummary("TotalTime", SummaryOperation.Sum, "WorkDate");
-                   helper.RegisterSummary("DisplayName", SummaryOperation.Count, "WorkDate");
+                helper.RegisterSummary("TotalTime", SummaryOperation.Sum, "WorkDate");
+                helper.RegisterSummary("DisplayName", SummaryOperation.Count, "WorkDate");
 
 
 
@@ -202,7 +225,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
             return qArray[0];
         }
 
-       
+
 
     }
 }

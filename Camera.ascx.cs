@@ -1,9 +1,11 @@
-﻿using DotNetNuke.Common.Utilities;
+﻿using DotNetNuke.Abstractions;
 using DotNetNuke.Entities.Modules;
+using Microsoft.Extensions.DependencyInjection;
+using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.JavaScriptLibraries;
 using DotNetNuke.Services.Exceptions;
-using System;
 using GIBS.Modules.GIBS_TimeTracker.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,12 +16,17 @@ namespace GIBS.Modules.GIBS_TimeTracker
 {
     public partial class Camera : PortalModuleBase
     {
-        public int ttUserID = 0;
+        private INavigationManager _navigationManager;
 
+        // Use property injection or resolve via HttpContext if needed, but for now, use default constructor.
+
+
+        public int ttUserID = 0;
 
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
+            _navigationManager = DependencyProvider.GetRequiredService<INavigationManager>();
 
             JavaScript.RequestRegistration(CommonJs.jQuery);
             //    JavaScript.RequestRegistration(CommonJs.jQueryUI);
@@ -118,7 +125,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
                 else
                 {
-                    Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(), true);
+                    Response.Redirect(_navigationManager.NavigateURL(), true);
                 }
 
             }
@@ -136,7 +143,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
             try
             {
 
-                string myLink = DotNetNuke.Common.Globals.NavigateURL("MakeID", "mid=" + this.ModuleId);
+                string myLink = _navigationManager.NavigateURL("MakeID", "mid=" + this.ModuleId);
                 //myLink += "?cid=" + clientId.ToString() + "&SkinSrc=[G]" + DotNetNuke.Common.Globals.QueryStringEncode(DotNetNuke.UI.Skins.SkinController.RootSkin + "/" + DotNetNuke.Common.Globals.glbHostSkinFolder + "/" + "popUpSkin");
                 myLink += "?cid=" + ttUserID.ToString();
 
@@ -160,9 +167,8 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void ButtonReturnToClientManager_Click(object sender, EventArgs e)
         {
 
-            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString() + "&ttUserId=" + ttUserID.ToString()));
-            //   object p =   DependencyProvider.GetRequiredService( INavigationManager).NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString());
-            //      object p = DependencyProvider.GetRequiredService(INavigationManager).NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString());
+            Response.Redirect(_navigationManager.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString() + "&ttUserId=" + ttUserID.ToString()));
+           
         }
 
 

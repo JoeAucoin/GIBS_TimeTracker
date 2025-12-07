@@ -1,6 +1,8 @@
 ﻿using DotNetNuke.Common.Utilities;
 using DotNetNuke.Common;
+using DotNetNuke.Abstractions;
 using DotNetNuke.Entities.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Framework.JavaScriptLibraries;
 using DotNetNuke.Security;
@@ -24,6 +26,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 {
     public partial class ListMembers : PortalModuleBase, IActionable
     {
+        private INavigationManager _navigationManager;
         private string _Filter = "";
 
         private int _CurrentPage = 1;
@@ -49,66 +52,11 @@ namespace GIBS.Modules.GIBS_TimeTracker
             set { _Filter = value; }
         }
 
-
-        //protected void Page_Init(Object sender, EventArgs e)
-        //{
-        //    foreach (DataGridColumn column in grdUsers.Columns)
-        //    {
-
-        //        if (column.GetType() == typeof(ImageCommandColumn))
-        //        {
-
-        //            ImageCommandColumn imageColumn = (ImageCommandColumn)column;
-
-        //            //Manage Edit Column NavigateURLFormatString                      
-        //            if (imageColumn.CommandName == "Edit")
-        //            {
-        //                //The Friendly URL parser does not like non-alphanumeric characters                          
-        //                //so first create the format string with a dummy value and then                          
-        //                //replace the dummy value with the FormatString place holder                          
-        //                string formatString = EditUrl("UserId", "KEYFIELD", "Edit");
-        //               // string formatString = EditUrl("UserId", "KEYFIELD", "Edit", "TabFocus=DonorRecord");
-        //                formatString = formatString.Replace("KEYFIELD", "{0}");
-        //                imageColumn.NavigateURLFormatString = formatString;
-        //            }
-
-        //            //CheckInOut
-        //            if (imageColumn.CommandName == "CheckInOut")
-        //            {
-        //                //The Friendly URL parser does not like non-alphanumeric characters                          
-        //                //so first create the format string with a dummy value and then                          
-        //                //replace the dummy value with the FormatString place holder                          
-        //                string formatString1 = Globals.NavigateURL(TabId, "", "UserId=IDFIELD");
-
-        //                formatString1 = formatString1.Replace("IDFIELD", "{0}");
-        //                imageColumn.NavigateURLFormatString = formatString1;
-        //            }
-
-
-        //            if (imageColumn.CommandName == "MakeID")
-        //            {
-        //                //The Friendly URL parser does not like non-alphanumeric characters                          
-        //                //so first create the format string with a dummy value and then                          
-        //                //replace the dummy value with the FormatString place holder
-        //                //
-        //                //   /ctl/MakeID/mid/386?cid=2&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true
-
-        //                string formatString1 = Globals.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
-
-        //                formatString1 = formatString1.Replace("IDFIELD", "{0}");
-                        
-        //                imageColumn.NavigateURLFormatString = formatString1;
-        //            }
-
-        //            //Localize Image Column Text                     
-        //            if (!String.IsNullOrEmpty(imageColumn.CommandName))
-        //            {
-        //                imageColumn.Text = Localization.GetString(imageColumn.CommandName, this.LocalResourceFile);
-        //            }
-        //        }
-        //        //column.Visible = isVisible;              
-        //    }
-        //}
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            _navigationManager = DependencyProvider.GetRequiredService<INavigationManager>();
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -282,7 +230,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
 
             string _URL = "";
-            _URL = Globals.NavigateURL(TabId, "ListMembers", _criteria.ToString(),"mid=" + ModuleId.ToString(), "currentpage=1", "SearchField=" + ddlSearchType.SelectedValue, "OrderBy=" + ddlOrderBy.SelectedValue);
+            _URL = _navigationManager.NavigateURL(TabId, "ListMembers", _criteria.ToString(),"mid=" + ModuleId.ToString(), "currentpage=1", "SearchField=" + ddlSearchType.SelectedValue, "OrderBy=" + ddlOrderBy.SelectedValue);
             Response.Redirect(_URL);
 
 
@@ -386,7 +334,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         {
             string _URL = Null.NullString;
 
-            _URL = Globals.NavigateURL(TabId, "ListMembers", "mid=" + ModuleId.ToString(), "filter=" + Filter, "currentpage=1", "SearchField=" + ddlSearchType.SelectedValue.ToString(), "OrderBy=" + ddlOrderBy.SelectedValue.ToString());
+            _URL = _navigationManager.NavigateURL(TabId, "ListMembers", "mid=" + ModuleId.ToString(), "filter=" + Filter, "currentpage=1", "SearchField=" + ddlSearchType.SelectedValue.ToString(), "OrderBy=" + ddlOrderBy.SelectedValue.ToString());
 
             return _URL;
         }
@@ -425,7 +373,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
         protected void btnAddNewUser_Click(object sender, EventArgs e)
         {
-            //  Response.Redirect(Globals.NavigateURL(this.TabId, EditUrl(), ""), true);
+            
             Response.Redirect(EditUrl("TabFocus", "UserRecord"));
         }
 
@@ -465,19 +413,19 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 myHL.NavigateUrl = formatString.ToString();
 
                 HyperLink myHLMakeIDCard = (HyperLink)e.Row.FindControl("HyperLinkMakeIDCard");
-                string formatString1 = Globals.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
+                string formatString1 = _navigationManager.NavigateURL(TabId, "MakeID", "AutoIDCard", "true", "mid", this.ModuleId.ToString(), "cid=IDFIELD&SkinSrc=[G]Skins%252f_default%252fpopUpSkin&ContainerSrc=%252fPortals%252f_default%252fContainers%252f_default%252fNo+Container&popUp=true");
                 formatString1 = formatString1.Replace("IDFIELD", e.Row.Cells[0].Text.ToString());
                 myHLMakeIDCard.NavigateUrl = formatString1.ToString();
 
                 //HyperLinkCheckInOut
                 HyperLink myHLCheckInOut = (HyperLink)e.Row.FindControl("HyperLinkCheckInOut");
-                string formatString2 = Globals.NavigateURL(TabId, "", "ttUserId=IDFIELD");
+                string formatString2 = _navigationManager.NavigateURL(TabId, "", "ttUserId=IDFIELD");
                 formatString2 = formatString2.Replace("IDFIELD", e.Row.Cells[0].Text.ToString());
                 myHLCheckInOut.NavigateUrl = formatString2.ToString();
 
                 //HyperLinkAddShift
                 HyperLink myHLAddShift = (HyperLink)e.Row.FindControl("HyperLinkAddShift");
-                string fromatString3 = Globals.NavigateURL(TabId, "EditCheckInOut", "mid", this.ModuleId.ToString(), "ttUserId=IDFIELD");
+                string fromatString3 = _navigationManager.NavigateURL(TabId, "EditCheckInOut", "mid", this.ModuleId.ToString(), "ttUserId=IDFIELD");
                 fromatString3 = fromatString3.Replace("IDFIELD", e.Row.Cells[0].Text.ToString());
                 myHLAddShift.NavigateUrl = fromatString3.ToString();
 

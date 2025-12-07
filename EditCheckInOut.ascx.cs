@@ -21,9 +21,23 @@ namespace GIBS.Modules.GIBS_TimeTracker
     public partial class EditCheckInOut : PortalModuleBase
     {
 
-        static int _ttid;
-        static int _ttUserID;
+        public int _ttid;
+        public int _ttUserID;
 
+        private readonly INavigationManager _navigationManager;
+
+        // Use property injection or resolve via HttpContext if needed, but for now, use default constructor.
+        public EditCheckInOut()
+        {
+            // If you need INavigationManager, resolve it via Service Locator or other DI mechanism available in your project.
+            // Example (if using DNN's Service Locator):
+            // _navigationManager = DotNetNuke.Common.Utilities.ServiceLocator.Get<INavigationManager>();
+        }
+
+        public EditCheckInOut(INavigationManager navigationManager)
+        {
+            _navigationManager = navigationManager;
+        }
 
         protected override void OnInit(EventArgs e)
         {
@@ -142,7 +156,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
                 }
                 else
                 {
-                    Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(), true);
+                    Response.Redirect(_navigationManager.NavigateURL(), true);
                 }
 
 
@@ -229,7 +243,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
 
         protected void ButtonReturnToList_Click(object sender, EventArgs e)
         {
-            string newURL = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "ListMembers", "mid=" + ModuleId.ToString());
+            string newURL = _navigationManager.NavigateURL(PortalSettings.ActiveTab.TabID, "ListMembers", "mid=" + ModuleId.ToString());
             Response.Redirect(newURL);
 
         }
@@ -237,7 +251,7 @@ namespace GIBS.Modules.GIBS_TimeTracker
         protected void ButtonReturnToUserRecord_Click(object sender, EventArgs e)
         {
             //ButtonReturnToUserRecord_Click
-            string newURL1 = Globals.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString(), "ttUserId=" + _ttUserID.ToString());
+            string newURL1 = _navigationManager.NavigateURL(PortalSettings.ActiveTab.TabID, "Edit", "mid=" + ModuleId.ToString(), "ttUserId=" + _ttUserID.ToString());
             Response.Redirect(newURL1);
 
 
